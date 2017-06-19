@@ -16,6 +16,7 @@ var game_file_list = [
 	"bin-debug/LoadingUI.js",
 	"bin-debug/Main.js",
 	"bin-debug/ThemeAdapter.js",
+	"bin-debug/ui/index/IndexFrame.js",
 	"bin-debug/ui/login/LoginFrame.js",
 	//----auto game_file_list end----
 ];

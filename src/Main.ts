@@ -99,7 +99,7 @@ class Main extends eui.UILayer {
             loginFrame.y = (stageY)/2 - 150;
             this.addChild(loginFrame);
 
-            this.stage.
+            //this.stage.
         }
     }
     /**

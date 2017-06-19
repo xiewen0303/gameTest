@@ -1,0 +1,16 @@
+package login;
+option java_package = "message";
+option java_outer_classname = "Login";
+
+import "common/common.proto";
+
+//登录
+message CS_Login
+{
+	optional string	accountId=1;    		//账号Id
+}
+
+message SC_Login
+{
+	optional common.RetInfo 	ret=1;    				//提示信息，默认0是正确返回
+}

@@ -1,0 +1,31 @@
+package Chat;
+option java_package = "message";
+option java_outer_classname = "Chat";
+
+import "common/common.proto";
+
+//聊天类型
+enum ChatType
+{
+	world_chat=1; // 世界频道
+	private_chat=2;// 私聊
+	guild_chat=3;//公会
+}
+
+//聊天
+message CS_ChatMessage
+{
+	optional string msg=1;    			//聊天内容
+	optional ChatType chatType=2;    	//世界频道,私聊,公会
+}
+
+message SC_ChatMessage
+{
+	optional common.RetInfo 	ret=1;  //提示信息，默认0是正确返回
+}
+
+//广播聊天数据
+message BC_ChatMessage
+{
+	optional string msg=1;    			//聊天内容
+}

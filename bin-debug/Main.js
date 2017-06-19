@@ -73,6 +73,7 @@ var Main = (function (_super) {
         RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
         RES.addEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, this.onItemLoadError, this);
         RES.loadGroup("preload");
+        RES.loadGroup("protofiles");
     };
     /**
      * 主题文件加载完成,开始预加载

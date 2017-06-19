@@ -1,0 +1,28 @@
+package bag;
+option java_package = "message";
+option java_outer_classname = "Bag";
+
+import "common/common.proto";
+
+//背包数据
+message CS_BagInfo
+{
+}
+
+message SC_BagInfo
+{
+    optional common.RetInfo 	ret = 1;    //提示信息，默认0是正确返回
+    repeated ItemInfo itemInfos = 2;        //道具信息
+}
+
+message ItemInfo
+{
+    optional int32 itemId=1;    //道具表配置id
+    optional int32 itemCount=2; //拥有的数量
+}
+
+//服务器主动推送更新背包数据
+message SC_UpdateItemInfos
+{
+    repeated ItemInfo itemInfos = 1;         //道具信息 itemCount = 0 表示删除
+}

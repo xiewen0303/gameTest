@@ -1,0 +1,10 @@
+package common;
+option java_package = "message.common";
+option java_outer_classname = "Common";
+
+//登录
+message RetInfo
+{ 
+	optional int32	codeId=1;    //提示信息ID号
+	repeated string datas =2;	 //参数(占位符预留)
+}

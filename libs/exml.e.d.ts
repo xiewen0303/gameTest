@@ -20,6 +20,8 @@ declare module skins{
 }
 declare class LoginFrameSkin extends eui.Skin{
 }
+declare class MainMapFrameSkin extends eui.Skin{
+}
 declare module skins{
 	class PanelSkin extends eui.Skin{
 	}

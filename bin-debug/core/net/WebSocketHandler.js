@@ -3,7 +3,9 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
 var WebSocketHandler = (function () {
-    function WebSocketHandler() {
+    function WebSocketHandler(ip, port) {
+        this.ip = ip;
+        this.port = port;
         this.initWebSocket();
     }
     WebSocketHandler.prototype.initWebSocket = function () {
@@ -20,7 +22,7 @@ var WebSocketHandler = (function () {
         //添加异常侦听，出现异常会调用此方法
         this.socket.addEventListener(egret.IOErrorEvent.IO_ERROR, this.onSocketError, this);
         //连接服务器
-        this.socket.connect("172.24.16.56", 8081);
+        this.socket.connect(this.ip, this.port);
     };
     //    private sendData():void {
     //        var t:string = "ssss";
@@ -91,16 +93,17 @@ var WebSocketHandler = (function () {
     //     }
     // }
     WebSocketHandler.prototype.onSocketOpen = function () {
-        this.trace("WebSocketOpen");
-        net.NetManager.registSocket(this.socket);
-        // this.sendData();
+        LogHandler.debug("WebSocketOpen");
+        NetHander.registSocket(this.socket);
+        //send login
+        login.LoginCtl.csLogin(login.LoginFrame.getAccountId());
     };
     WebSocketHandler.prototype.onSocketClose = function () {
-        this.trace("WebSocketClose");
-        net.NetManager.closeSocket();
+        LogHandler.debug("WebSocketClose");
+        NetHander.closeSocket();
     };
     WebSocketHandler.prototype.onSocketError = function () {
-        this.trace("WebSocketError");
+        LogHandler.debug("WebSocketError");
     };
     WebSocketHandler.prototype.onReceiveMessage = function (e) {
         //创建 ByteArray 对象
@@ -123,7 +126,7 @@ var WebSocketHandler = (function () {
         // }
         // msgBuff = pbView.buffer;
         msgBuff = btyearray.buffer;
-        net.NetManager.dispatchHander(traceId, msgCode, msgBuff);
+        NetHander.dispatchHander(traceId, msgCode, msgBuff);
         // var proto:string = RES.getRes("common_proto");
         // console.log(proto);
         // var builder:any = dcodeIO.ProtoBuf.loadProto(proto);   
@@ -145,11 +148,6 @@ var WebSocketHandler = (function () {
         // this.trace("message : "+boo.toString());
         // this.trace("readInt : "+num.toString());
         // this.testProtoContent();
-    };
-    WebSocketHandler.prototype.trace = function (msg) {
-        // this.text = this.text + "\n" + msg;
-        // this.stateText.text = this.text;
-        console.log(msg);
     };
     return WebSocketHandler;
 }());

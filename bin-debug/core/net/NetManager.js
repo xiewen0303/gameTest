@@ -5,69 +5,87 @@ var net;
 (function (net) {
     var NetManager = (function () {
         function NetManager() {
+            /**
+             * 协议号对应的解析方法
+             */
+            this.msgMap = {};
+            /**
+             * proto描述文件
+             */
+            this.messages = {};
         }
-        // private static decodes:Array<IDecode> = new Array<IDecode>();
-        // private static decode(datas:egret.ByteArray):boolean {
-        // 	NetManager.decodes.forEach(element => {
-        // 		if(!element.handler(datas)){
-        // 			return false;
-        // 		}
-        // 	});
-        // 	return true;
-        // }
-        // public static registDecode(decode:IDecode):void{
-        // 	NetManager.decodes.push(decode);
-        // }
-        NetManager.initProto = function () {
-            net.NetHandler.getNetHandler().initProto();
+        NetManager.prototype.initProto = function () {
+            this.registMethod();
+            this.registMessage();
         };
-        NetManager.dispatchHander = function (traceId, messageCode, data) {
-            net.NetHandler.getNetHandler().dispatchMessage(messageCode, data);
+        NetManager.getNetManager = function () {
+            return NetManager.netManager;
         };
-        NetManager.registSocket = function (socket) {
-            NetManager.socket = socket;
-        };
-        NetManager.closeSocket = function () {
-            if (NetManager.socket != null) {
-                NetManager.socket.close();
+        /**
+         *  @messageCode  协议号
+         *  @data 具体的proto数据
+         */
+        NetManager.prototype.dispatchMessage = function (messageCode, buffer) {
+            var handler = this.msgMap[messageCode];
+            if (handler == null) {
+                console.log("messageCode is not regist! messageCode=" + messageCode);
+                return;
             }
+            var data = this.parseMessage(messageCode, buffer);
+            if (null == data) {
+                console.log("messageCode is can't regist! messageCode=" + messageCode);
+                return;
+            }
+            handler(data);
+        };
+        /**
+         * parse ArrayBuffer to Message
+         */
+        NetManager.prototype.parseMessage = function (messageCode, buffer) {
+            try {
+                var clazz = this.getMessageClazz(messageCode);
+                if (clazz == null) {
+                    console.log("parse messageCode is not exits!messagecode:" + messageCode);
+                    return null;
+                }
+                return clazz.decode(buffer);
+            }
+            catch (e) {
+                console.log("parse message error!" + e);
+            }
+            return null;
+        };
+        NetManager.prototype.createClazz = function (resName, messageName) {
+            var proto = RES.getRes(resName);
+            var builder = dcodeIO.ProtoBuf.loadProto(proto, "resource/proto/");
+            var clazz = builder.build(messageName);
+            return clazz;
         };
         /**
          * 获取message对应的clazz
-         * @messageCode   MessageCode
          */
-        NetManager.getMessageClazz = function (messageCode) {
-            var clazz = net.NetHandler.getNetHandler().getMessageClazz(messageCode);
-            if (clazz == null) {
-                console.log("MessageCode to class is not exits,messageCode:" + messageCode);
-                return null;
-            }
-            return new clazz();
+        NetManager.prototype.getMessageClazz = function (messageCode) {
+            return this.messages[messageCode];
         };
         /**
-         * 发送协议
+         * generate code
+         * regist message  【all proto message need regist】
          */
-        NetManager.sendMessage = function (data) {
-            if (!NetManager.socket.connected || NetManager.socket == null) {
-                console.log("socket is not connected!");
-                return;
-            }
-            var arraybuffer = data.toArrayBuffer();
-            var contentLen = arraybuffer.byteLength;
-            var messageCode = 0;
-            var traceId = 0;
-            var btyearray = new egret.ByteArray();
-            btyearray.writeInt(contentLen + 8);
-            btyearray.writeInt(traceId);
-            btyearray.writeInt(messageCode);
-            btyearray.writeBytes(new egret.ByteArray(arraybuffer));
-            btyearray.position = 0;
-            this.socket.writeBytes(btyearray, 0, btyearray.bytesAvailable);
-            this.socket.flush();
+        NetManager.prototype.registMessage = function () {
+            this.messages[net.MessageCode.common_RetInfo] = this.createClazz("common_proto", "common.RetInfo");
+            this.messages[net.MessageCode.login_SC_Login] = this.createClazz("login_proto", "login.SC_Login");
+            this.messages[net.MessageCode.login_CS_Login] = this.createClazz("login_proto", "login.CS_Login");
+        };
+        /**
+         * generate code
+         * regist messageCode
+         */
+        NetManager.prototype.registMethod = function () {
+            this.msgMap[net.MessageCode.login_SC_Login] = login.LoginCtl.scLogin;
         };
         return NetManager;
     }());
-    NetManager.socket = null;
+    NetManager.netManager = new NetManager();
     net.NetManager = NetManager;
     __reflect(NetManager.prototype, "net.NetManager");
 })(net || (net = {}));

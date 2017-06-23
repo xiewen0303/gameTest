@@ -1,95 +1,92 @@
-module net {
-	export class NetHandler {
+class NetHander {
 
-		private constructor() {
+		private static socket:egret.WebSocket = null;
+
+		public constructor() {
+		}
+
+		/**
+		 * 连接是否开启
+		 */
+		public static isConnect():boolean{
+			return NetHander.socket.connected;
+		}
+
+	 	// private static decodes:Array<IDecode> = new Array<IDecode>();
+		// private static decode(datas:egret.ByteArray):boolean {
+		// 	NetManager.decodes.forEach(element => {
+		// 		if(!element.handler(datas)){
+		// 			return false;
+		// 		}
+		// 	});
+		// 	return true;
+		// }
+		// public static registDecode(decode:IDecode):void{
+		// 	NetManager.decodes.push(decode);
+		// }
+		//create socket
+		
+		public static createSocket(ip:string,port:number):void{
+			new WebSocketHandler(ip,port);
+		}
+
+		public static initProto():void {
+			LogHandler.debug("coming.. init proto");
+			net.NetManager.getNetManager().initProto();
 		}
 		
-		public initProto():void{
-			this.registMethod();
-			this.registMessage();
+		public static dispatchHander(traceId:number,messageCode:number,data:any):void {
+			net.NetManager.getNetManager().dispatchMessage(messageCode,data);
 		}
 
-		private static netHandler:NetHandler = new NetHandler();
-		/**
-		 * 协议号对应的解析方法
-		 */
-		private msgMap:{[key:number]:Function} = {};
-		
-		/**
-		 * proto描述文件
-		 */
-		private messages:{[key:number]:any} = {};
 
-		public static getNetHandler():NetHandler{
-			return net.NetHandler.netHandler;
+
+		public static registSocket(socket:egret.WebSocket):void{
+			NetHander.socket = socket;
+		}
+
+		public static closeSocket():void {
+			if(NetHander.socket != null){
+				NetHander.socket.close();
+			}
 		}
 
 		/**
-		 *  @messageCode  协议号
-		 *  @data 具体的proto数据
+		 * 获取message对应的clazz 
+		 * @messageCode   MessageCode
 		 */
-		public dispatchMessage(messageCode:number,buffer:ArrayBuffer):void {
-		 	var handler:Function = this.msgMap[messageCode]
-			if(handler == null){
-				console.log("messageCode is not regist! messageCode="+messageCode);
+		public static getMessageClazz(messageCode:net.MessageCode):any {
+			 var clazz:any = net.NetManager.getNetManager().getMessageClazz(messageCode);
+			 if(clazz == null){
+				 console.log("MessageCode to class is not exits,messageCode:"+messageCode);
+				 return null;
+			 }
+			 return new clazz();
+		}
+				
+		/**
+		 * 发送协议
+		 */
+		public static sendMessage(data:any):void {
+			if (!NetHander.socket.connected || NetHander.socket== null) {
+				console.log("socket is not connected!");
 				return;
 			}
+			var arraybuffer: ArrayBuffer = data.toArrayBuffer();
+			var contentLen: number = arraybuffer.byteLength;
+
+			var messageCode:number  = 0;
+			var traceId:number  = 0;
+			var btyearray:egret.ByteArray = new egret.ByteArray();
 			
-			var data:any = this.parseMessage(messageCode,buffer);
-			if(null == data){
-				console.log("messageCode is can't regist! messageCode="+messageCode);
-				return;
-			}
-			handler(data);
-		}
+			btyearray.writeInt(contentLen+8);
+			btyearray.writeInt(traceId);
+			btyearray.writeInt(messageCode);
 
-		/**
-		 * parse ArrayBuffer to Message
-		 */
-		public parseMessage(messageCode:number,buffer:ArrayBuffer):any{
-			try { 
-					var clazz:any = this.getMessageClazz(messageCode);
-					if(clazz == null){
-						console.log("parse messageCode is not exits!messagecode:"+messageCode);
-						return null;
-					}
-					return clazz.decode(buffer);
-				} catch(e) { 
-					console.log("parse message error!"+e);
-				}
-				return null;
-		}
-
-		private createClazz(resName:string,messageName:string):any{
-			var proto:string = RES.getRes(resName);
-			var builder:any = dcodeIO.ProtoBuf.loadProto(proto,"resource/assets/proto/");
-			var clazz:any = builder.build(messageName);
-			return clazz;
-		}
-
-		/**
-		 * 获取message对应的clazz
-		 */
-		public getMessageClazz(messageCode:number):any {
-			return this.messages[messageCode];
-		}
-
-		/**
-		 * generate code
-		 * regist message  【all proto message need regist】
-		 */
-		private registMessage():void {
-			this.messages[net.MessageCode.common_RetInfo] = this.createClazz("common_proto","common.RetInfo");
-			this.messages[net.MessageCode.login_SC_Login] = this.createClazz("login_proto","login.SC_Login");
-			this.messages[net.MessageCode.login_CS_Login] = this.createClazz("login_proto","login.CS_Login");
-		}
-
-		/**
-		 * generate code
-		 * regist messageCode
-		 */
-		private registMethod():void {
-			this.msgMap[net.MessageCode.login_SC_Login] = login.LoginCtl.scLogin;
+			btyearray.writeBytes(new egret.ByteArray(arraybuffer));
+			btyearray.position = 0;
+			
+			this.socket.writeBytes(btyearray,0,btyearray.bytesAvailable);
+			this.socket.flush();
 		}
 	}
-}

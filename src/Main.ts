@@ -27,7 +27,21 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 
-class Main extends eui.UILayer {
+class Main extends frame.MapBaseLayer {
+
+
+    init():void {
+        LogHandler.debug("coming.. Main"+this.stage);
+         //储存当前场景对象
+        let frameManager = store.Stores.getFrameManager();
+        frameManager.setGameStage(this.stage);
+        frameManager.addLayer(this);
+    }
+
+    public getId():frame.FrameType {
+		return frame.FrameType.login_frame;
+	}
+
     /**
      * 加载进度界面
      * loading process interface
@@ -44,6 +58,7 @@ class Main extends eui.UILayer {
         //设置加载进度界面
         this.loadingView = new LoadingUI();
         this.stage.addChild(this.loadingView);
+
         // initialize the Resource loading library
         //初始化Resource资源加载库
         RES.addEventListener(RES.ResourceEvent.CONFIG_COMPLETE, this.onConfigComplete, this);
@@ -64,8 +79,9 @@ class Main extends eui.UILayer {
         RES.addEventListener(RES.ResourceEvent.GROUP_LOAD_ERROR, this.onResourceLoadError, this);
         RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
         RES.addEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, this.onItemLoadError, this);
+
+        RES.loadGroup("protofiles",1);
         RES.loadGroup("preload");
-        RES.loadGroup("protofiles");
     }
     private isThemeLoadEnd: boolean = false;
     /**
@@ -91,7 +107,14 @@ class Main extends eui.UILayer {
             this.isResourceLoadEnd = true;
             this.createScene();
         }
+
+        //初始化proto文件
+        if(event.groupName == "protofiles"){
+            NetHander.initProto();
+            this.init();
+        }
     }
+
     private createScene(){
         if(this.isThemeLoadEnd && this.isResourceLoadEnd){
             //this.startCreateScene();
@@ -99,8 +122,6 @@ class Main extends eui.UILayer {
             let stageY = this.stage.stageHeight;
             loginFrame.y = (stageY)/2 - 150;
             this.addChild(loginFrame);
-
-            //this.stage.
         }
     }
     /**
@@ -136,7 +157,7 @@ class Main extends eui.UILayer {
      * Create scene interface
      */
     protected startCreateScene(): void {
-        let sky = this.createBitmapByName("bg_jpg");
+        let sky = util.UIUtil.createBitmapByName("bg_jpg");
         this.addChild(sky);
         let stageW = this.stage.stageWidth;
         let stageH = this.stage.stageHeight;
@@ -150,7 +171,7 @@ class Main extends eui.UILayer {
         topMask.y = 33;
         this.addChild(topMask);
 
-        let icon:egret.Bitmap = this.createBitmapByName("egret_icon_png");
+        let icon:egret.Bitmap = util.UIUtil.createBitmapByName("egret_icon_png");
         this.addChild(icon);
         icon.x = 26;
         icon.y = 33;
@@ -197,16 +218,16 @@ class Main extends eui.UILayer {
         this.addChild(button);
         button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onButtonClick, this);
     }
-    /**
-     * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
-     * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
-     */
-    private createBitmapByName(name:string):egret.Bitmap {
-        let result = new egret.Bitmap();
-        let texture:egret.Texture = RES.getRes(name);
-        result.texture = texture;
-        return result;
-    }
+    // /**
+    //  * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
+    //  * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
+    //  */
+    // private createBitmapByName(name:string):egret.Bitmap {
+    //     let result = new egret.Bitmap();
+    //     let texture:egret.Texture = RES.getRes(name);
+    //     result.texture = texture;
+    //     return result;
+    // }
     /**
      * 描述文件加载成功，开始播放动画
      * Description file loading is successful, start to play the animation

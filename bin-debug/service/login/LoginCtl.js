@@ -10,15 +10,27 @@ var login;
             var retInfo = data.get("ret");
             var codeId = retInfo.get("codeId");
             var datas = retInfo.get("datas");
-            //TODO login business
-            console.log("coming csLogin " + codeId + "\tdatas" + datas);
-            //test send message
-            var csMsg = net.NetManager.getMessageClazz(net.MessageCode.login_CS_Login);
-            csMsg.set("accountId", "zhagnsan");
-            net.NetManager.sendMessage(csMsg);
+            if (codeId != 0) {
+                LogHandler.error("登录错误：" + codeId);
+                alert("登录错误!");
+                return;
+            }
+            //切换场景
+            var frameManager = store.Stores.getFrameManager();
+            frameManager.removeLayer(frame.FrameType.login_frame);
+            var mainMapLayer = new map.MainMapLayer();
+            frameManager.addLayer(mainMapLayer);
+            frameManager.addToStage(mainMapLayer);
+        };
+        /**
+         * 发送登录协议
+         */
+        LoginCtl.csLogin = function (accountId) {
+            LoginCtl.loginService.login(accountId);
         };
         return LoginCtl;
     }());
+    LoginCtl.loginService = new login.LoginService();
     login.LoginCtl = LoginCtl;
     __reflect(LoginCtl.prototype, "login.LoginCtl");
 })(login || (login = {}));

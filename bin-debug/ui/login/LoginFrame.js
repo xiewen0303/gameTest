@@ -12,7 +12,6 @@ var login;
         __extends(LoginFrame, _super);
         function LoginFrame() {
             return _super.call(this) || this;
-            //this.init();
         }
         LoginFrame.prototype.partAdded = function (partName, instance) {
             _super.prototype.partAdded.call(this, partName, instance);
@@ -24,14 +23,21 @@ var login;
             _super.prototype.childrenCreated.call(this);
         };
         /**
+         * 账号信息
+         */
+        LoginFrame.getAccountId = function () {
+            return LoginFrame.accountId;
+        };
+        /**
          * 点击按钮
          * Click the button
          */
         LoginFrame.prototype.loginClick = function (e) {
-            var t = e.target;
-            var ip = this.getChildByName("ip");
-            var accountId = this.getChildByName("accountId");
-            LogHandler.debug("ip:" + ip.text + "   accountId：" + accountId.text);
+            var urlData = this.getChildByName("ip");
+            var url = urlData.text.split(":");
+            NetHander.createSocket(url[0], Number(url[1]));
+            var accountData = this.getChildByName("accountId");
+            LoginFrame.accountId = accountData.text;
         };
         return LoginFrame;
     }(eui.Component));

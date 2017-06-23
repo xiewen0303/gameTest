@@ -3,11 +3,13 @@
 
 class WebSocketHandler{
 
-    // private stateText:egret.TextField;  
-    // private text:string = "TestWebSocket";
+    private ip:string;
+    private port:number;
     private socket:egret.WebSocket;
 
-    public constructor(){
+    public constructor(ip:string,port:number){
+        this.ip = ip;
+        this.port = port;
         this.initWebSocket();
     }
 
@@ -25,7 +27,7 @@ class WebSocketHandler{
         //添加异常侦听，出现异常会调用此方法
         this.socket.addEventListener(egret.IOErrorEvent.IO_ERROR, this.onSocketError, this);
         //连接服务器
-        this.socket.connect("172.24.16.56", 8081);
+        this.socket.connect(this.ip, this.port);
     }
 
     //    private sendData():void {
@@ -121,18 +123,20 @@ class WebSocketHandler{
     // }
 
     private onSocketOpen():void {
-        this.trace("WebSocketOpen");
-        net.NetManager.registSocket(this.socket);
-        // this.sendData();
+        LogHandler.debug("WebSocketOpen");
+        NetHander.registSocket(this.socket);
+
+        //send login
+        login.LoginCtl.csLogin(login.LoginFrame.getAccountId());
     }
 
     private onSocketClose():void {
-        this.trace("WebSocketClose");
-         net.NetManager.closeSocket();
+        LogHandler.debug("WebSocketClose");
+        NetHander.closeSocket();
     }
 
     private onSocketError():void {
-        this.trace("WebSocketError");
+        LogHandler.debug("WebSocketError");
     }
 
     private onReceiveMessage(e:egret.Event):void {
@@ -165,7 +169,7 @@ class WebSocketHandler{
         // msgBuff = pbView.buffer;
 
         msgBuff = btyearray.buffer;
-        net.NetManager.dispatchHander(traceId,msgCode,msgBuff);
+        NetHander.dispatchHander(traceId,msgCode,msgBuff);
 
         // var proto:string = RES.getRes("common_proto");
         // console.log(proto);
@@ -199,13 +203,6 @@ class WebSocketHandler{
         // this.trace("message : "+boo.toString());
         // this.trace("readInt : "+num.toString());
         // this.testProtoContent();
-    }
-
-
-    private trace(msg:any):void {
-        // this.text = this.text + "\n" + msg;
-        // this.stateText.text = this.text;
-        console.log(msg);
     }
 
 }

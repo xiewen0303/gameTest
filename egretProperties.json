@@ -28,11 +28,12 @@
       "name": "socket"
     },
     {
-      "name": "dragonBones"
-    },
-    {
       "name": "protobuf",
       "path": "F:/egret/code/egret-protobuf-master/egret_test/protobuf"
+    }
+    ,
+    {
+      "name": "dragonBones"
     }
   ]
 }

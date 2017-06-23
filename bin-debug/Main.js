@@ -42,6 +42,16 @@ var Main = (function (_super) {
         _this.isResourceLoadEnd = false;
         return _this;
     }
+    Main.prototype.init = function () {
+        LogHandler.debug("coming.. Main" + this.stage);
+        //储存当前场景对象
+        var frameManager = store.Stores.getFrameManager();
+        frameManager.setGameStage(this.stage);
+        frameManager.addLayer(this);
+    };
+    Main.prototype.getId = function () {
+        return frame.FrameType.login_frame;
+    };
     Main.prototype.createChildren = function () {
         _super.prototype.createChildren.call(this);
         //inject the custom material parser
@@ -72,8 +82,8 @@ var Main = (function (_super) {
         RES.addEventListener(RES.ResourceEvent.GROUP_LOAD_ERROR, this.onResourceLoadError, this);
         RES.addEventListener(RES.ResourceEvent.GROUP_PROGRESS, this.onResourceProgress, this);
         RES.addEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, this.onItemLoadError, this);
+        RES.loadGroup("protofiles", 1);
         RES.loadGroup("preload");
-        RES.loadGroup("protofiles");
     };
     /**
      * 主题文件加载完成,开始预加载
@@ -96,6 +106,11 @@ var Main = (function (_super) {
             RES.removeEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, this.onItemLoadError, this);
             this.isResourceLoadEnd = true;
             this.createScene();
+        }
+        //初始化proto文件
+        if (event.groupName == "protofiles") {
+            NetHander.initProto();
+            this.init();
         }
     };
     Main.prototype.createScene = function () {
@@ -139,7 +154,7 @@ var Main = (function (_super) {
      * Create scene interface
      */
     Main.prototype.startCreateScene = function () {
-        var sky = this.createBitmapByName("bg_jpg");
+        var sky = util.UIUtil.createBitmapByName("bg_jpg");
         this.addChild(sky);
         var stageW = this.stage.stageWidth;
         var stageH = this.stage.stageHeight;
@@ -151,7 +166,7 @@ var Main = (function (_super) {
         topMask.graphics.endFill();
         topMask.y = 33;
         this.addChild(topMask);
-        var icon = this.createBitmapByName("egret_icon_png");
+        var icon = util.UIUtil.createBitmapByName("egret_icon_png");
         this.addChild(icon);
         icon.x = 26;
         icon.y = 33;
@@ -192,16 +207,16 @@ var Main = (function (_super) {
         this.addChild(button);
         button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onButtonClick, this);
     };
-    /**
-     * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
-     * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
-     */
-    Main.prototype.createBitmapByName = function (name) {
-        var result = new egret.Bitmap();
-        var texture = RES.getRes(name);
-        result.texture = texture;
-        return result;
-    };
+    // /**
+    //  * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
+    //  * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
+    //  */
+    // private createBitmapByName(name:string):egret.Bitmap {
+    //     let result = new egret.Bitmap();
+    //     let texture:egret.Texture = RES.getRes(name);
+    //     result.texture = texture;
+    //     return result;
+    // }
     /**
      * 描述文件加载成功，开始播放动画
      * Description file loading is successful, start to play the animation
@@ -241,6 +256,6 @@ var Main = (function (_super) {
         this.addChild(panel);
     };
     return Main;
-}(eui.UILayer));
+}(frame.MapBaseLayer));
 __reflect(Main.prototype, "Main");
 //# sourceMappingURL=Main.js.map

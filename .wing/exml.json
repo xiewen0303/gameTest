@@ -3,5 +3,10 @@
         "path": "..\\resource\\eui_skins\\LoginFrame.ts",
         "class": "LoginFrame",
         "parentPath": ""
+    },
+    "15cc4cee40c": {
+        "path": "ui\\map\\MainMapFrame.ts",
+        "class": "MainMapFrame",
+        "parentPath": ""
     }
 }

@@ -2,7 +2,6 @@ module login {
 	export class LoginFrame extends eui.Component implements eui.UIComponent{
 		public constructor() {
 			super();
-			//this.init();
 		}
 
 		protected partAdded(partName:string,instance:any):void
@@ -18,15 +17,25 @@ module login {
 			super.childrenCreated();
 		}
 		
+		private static accountId:string;
+		/**
+		 * 账号信息
+		 */
+		public static getAccountId():string{
+			return LoginFrame.accountId;
+		}
+		
 		/**
 		 * 点击按钮
 		 * Click the button
 		 */
 		private loginClick(e: egret.TouchEvent) {
-			let t = e.target;
-			let ip = <eui.TextInput>this.getChildByName("ip");
-			let accountId = <eui.TextInput>this.getChildByName("accountId");
-			LogHandler.debug("ip:"+ip.text+"   accountId："+accountId.text);
+			let urlData = <eui.TextInput>this.getChildByName("ip");
+			let url:string[] =  urlData.text.split(":");
+			NetHander.createSocket(url[0],Number(url[1]));
+
+			let accountData = <eui.TextInput>this.getChildByName("accountId");
+			LoginFrame.accountId = accountData.text;
 		}
 	}
 }

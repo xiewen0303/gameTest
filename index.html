@@ -9,7 +9,7 @@
     <meta name="screen-orientation" content="portrait"/>
     <meta name="x5-fullscreen" content="true"/>
     <meta name="360-fullscreen" content="true"/>
-    <style>
+   <style>
         html, body {
             -ms-touch-action: none;
             background: #888888;
@@ -35,24 +35,42 @@
     <!--这个标签为不通过egret提供的第三方库的方式使用的 javascript 文件，请将这些文件放在libs下，但不要放在modules下面。-->
     <!--other_libs_files_start-->
     <script egret="lib" src="polyfill/promise.js" src-release="polyfill/promise.min.js"></script>
+    
+    <script src="libs/modules/protobuf/Long.min.js"></script>
+    <script src="libs/modules/protobuf/ByteBufferAB.min.js"></script>
+    <script src="libs/modules/protobuf/ProtoBuf.min.js"></script>
     <!--other_libs_files_end-->
 
     <!--这个标签会被替换为项目中所有的 javascript 文件。删除 game_files 标签后，项目文件加载列表将不会变化，请谨慎操作！-->
     <!--game_files_start-->
-	<script egret="game" src="bin-debug/core/log/LogHandler.js"></script>
-	<script egret="game" src="bin-debug/core/net/WebSocketHandler.js"></script>
-	<script egret="game" src="bin-debug/core/net/Decode.js"></script>
-	<script egret="game" src="bin-debug/core/net/IDecode.js"></script>
-	<script egret="game" src="bin-debug/core/net/MessageCode.js"></script>
-	<script egret="game" src="bin-debug/core/net/NetHandler.js"></script>
+	<script egret="game" src="bin-debug/service/map/MapManager.js"></script>
+	<script egret="game" src="bin-debug/ui/frameManager/FrameManager.js"></script>
+	<script egret="game" src="bin-debug/ui/frameManager/MapBaseLayer.js"></script>
+	<script egret="game" src="bin-debug/service/login/service/LoginService.js"></script>
+	<script egret="game" src="bin-debug/service/map/service/MapService.js"></script>
+	<script egret="game" src="bin-debug/ui/util/UIUtil.js"></script>
 	<script egret="game" src="bin-debug/core/net/NetManager.js"></script>
-	<script egret="game" src="bin-debug/AssetAdapter.js"></script>
+	<script egret="game" src="bin-debug/core/net/WebSocketHandler.js"></script>
 	<script egret="game" src="bin-debug/LoadingUI.js"></script>
 	<script egret="game" src="bin-debug/Main.js"></script>
 	<script egret="game" src="bin-debug/service/login/LoginCtl.js"></script>
+	<script egret="game" src="bin-debug/AssetAdapter.js"></script>
+	<script egret="game" src="bin-debug/core/net/Decode.js"></script>
+	<script egret="game" src="bin-debug/service/map/MapCtl.js"></script>
+	<script egret="game" src="bin-debug/core/log/LogHandler.js"></script>
+	<script egret="game" src="bin-debug/service/map/model/Cell.js"></script>
+	<script egret="game" src="bin-debug/core/net/IDecode.js"></script>
+	<script egret="game" src="bin-debug/service/store/Stores.js"></script>
 	<script egret="game" src="bin-debug/ThemeAdapter.js"></script>
+	<script egret="game" src="bin-debug/core/net/MessageCode.js"></script>
+	<script egret="game" src="bin-debug/ui/frameManager/FrameType.js"></script>
+	<script egret="game" src="bin-debug/ui/frameManager/IBGLayer.js"></script>
+	<script egret="game" src="bin-debug/core/net/NetHandler.js"></script>
 	<script egret="game" src="bin-debug/ui/index/IndexFrame.js"></script>
 	<script egret="game" src="bin-debug/ui/login/LoginFrame.js"></script>
+	<script egret="game" src="bin-debug/ui/map/MainMapFrame.js"></script>
+	<script egret="game" src="bin-debug/ui/map/MainMapLayer.js"></script>
+	<script egret="game" src="bin-debug/service/map/MapConst.js"></script>
 	<!--game_files_end-->
 </head>
 <body>
@@ -62,8 +80,8 @@
          data-orientation="portrait" 
          data-scale-mode="showAll"
          data-frame-rate="30"
-         data-content-width="400"
-         data-content-height="800"
+         data-content-width="640"
+         data-content-height="1136"
          data-show-paint-rect="false"
          data-multi-fingered="2"
          data-show-fps="false" data-show-log="false"

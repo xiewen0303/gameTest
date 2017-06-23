@@ -1,21 +1,36 @@
 module login {
 	export class LoginCtl {
 
+		private static loginService:LoginService = new LoginService();
+
 		public constructor() {
 		}
 		
 		public static scLogin(data:any):void {
-			var retInfo:any = data.get("ret");
-			var codeId:number = <number>retInfo.get("codeId");
-			var datas:String[] = <String[]>retInfo.get("datas");
+			let retInfo:any = data.get("ret");
+			let codeId:number = <number>retInfo.get("codeId");
+			let datas:String[] = <String[]>retInfo.get("datas");
 			
-			//TODO login business
-			console.log("coming csLogin "+codeId+"\tdatas"+datas);
+			if(codeId != 0){
+				LogHandler.error("登录错误："+codeId);
+				alert("登录错误!");
+				return;
+			}
 
-			//test send message
-			var csMsg:any = net.NetManager.getMessageClazz(net.MessageCode.login_CS_Login);
-			csMsg.set("accountId","zhagnsan");
-			net.NetManager.sendMessage(csMsg);
+			//切换场景
+			let frameManager = 	store.Stores.getFrameManager();
+			frameManager.removeLayer(frame.FrameType.login_frame);
+			let mainMapLayer = new map.MainMapLayer();
+			
+			frameManager.addLayer(mainMapLayer);
+			frameManager.addToStage(mainMapLayer);
+		}
+		
+		/**
+		 * 发送登录协议
+		 */
+		public static csLogin(accountId:string):void {
+			LoginCtl.loginService.login(accountId);
 		}
 	}
 }

@@ -18,7 +18,7 @@ module map {
 
 		public move():void {
 			let mapCell = this.mapManager.getMapCell(0,0);
-			
+			   //ss
 		}
 	}
 }

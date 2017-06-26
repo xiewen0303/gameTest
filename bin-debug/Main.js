@@ -45,7 +45,7 @@ var Main = (function (_super) {
     Main.prototype.init = function () {
         LogHandler.debug("coming.. Main" + this.stage);
         //储存当前场景对象
-        var frameManager = store.Stores.getFrameManager();
+        var frameManager = Stores.getFrameManager();
         frameManager.setGameStage(this.stage);
         frameManager.addLayer(this);
     };

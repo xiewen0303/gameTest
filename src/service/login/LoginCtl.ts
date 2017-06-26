@@ -1,8 +1,6 @@
 module login {
 	export class LoginCtl {
 
-		private static loginService:LoginService = new LoginService();
-
 		public constructor() {
 		}
 		
@@ -18,7 +16,7 @@ module login {
 			}
 
 			//切换场景
-			let frameManager = 	store.Stores.getFrameManager();
+			let frameManager = 	Stores.getFrameManager();
 			frameManager.removeLayer(frame.FrameType.login_frame);
 			let mainMapLayer = new map.MainMapLayer();
 			
@@ -30,7 +28,7 @@ module login {
 		 * 发送登录协议
 		 */
 		public static csLogin(accountId:string):void {
-			LoginCtl.loginService.login(accountId);
+			Services.getLoginService().login(accountId);
 		}
 	}
 }

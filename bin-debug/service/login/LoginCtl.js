@@ -16,7 +16,7 @@ var login;
                 return;
             }
             //切换场景
-            var frameManager = store.Stores.getFrameManager();
+            var frameManager = Stores.getFrameManager();
             frameManager.removeLayer(frame.FrameType.login_frame);
             var mainMapLayer = new map.MainMapLayer();
             frameManager.addLayer(mainMapLayer);
@@ -26,11 +26,10 @@ var login;
          * 发送登录协议
          */
         LoginCtl.csLogin = function (accountId) {
-            LoginCtl.loginService.login(accountId);
+            Services.getLoginService().login(accountId);
         };
         return LoginCtl;
     }());
-    LoginCtl.loginService = new login.LoginService();
     login.LoginCtl = LoginCtl;
     __reflect(LoginCtl.prototype, "login.LoginCtl");
 })(login || (login = {}));

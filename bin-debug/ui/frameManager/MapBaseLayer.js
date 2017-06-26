@@ -26,7 +26,7 @@ var frame;
         MapBaseLayer.prototype.setBg = function (bgName) {
             var sky = util.UIUtil.createBitmapByName(bgName);
             this.addChild(sky);
-            var gameStage = store.Stores.getFrameManager().getGameStage();
+            var gameStage = Stores.getFrameManager().getGameStage();
             var stageW = gameStage.stageWidth;
             var stageH = gameStage.stageHeight;
             sky.width = stageW;

@@ -20,6 +20,8 @@ module map {
 		 * 初始化地图
 		 */
 		private initMap():void {
+			//设置背景的宽和高
+			
 			map.MapCtl.initMap(this);
 		}
 	}

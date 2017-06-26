@@ -25,6 +25,7 @@ var map;
          * 初始化地图
          */
         MainMapFrame.prototype.initMap = function () {
+            //设置背景的宽和高
             map.MapCtl.initMap(this);
         };
         return MainMapFrame;

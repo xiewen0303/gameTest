@@ -1,5 +1,4 @@
-module store {
-	export class Stores {
+ class Stores {
 
 		private static frameManager:frame.FrameManager = new frame.FrameManager();
 		private static mapManager:map.MapManager = new map.MapManager();
@@ -15,4 +14,3 @@ module store {
 			return Stores.mapManager;
 		}
 	}
-}

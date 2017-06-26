@@ -22,9 +22,12 @@ var map;
          * 初始化
          */
         MainMapLayer.prototype.init = function () {
-            this.setBg("bg_014_png");
+            //TODO this.setBg("bg_014_png");
             var mainMapFrame = new map.MainMapFrame();
             this.addChild(mainMapFrame);
+            // mainMapFrame.addEventListener(egret.TouchEvent.TOUCH_TAP,Services.getMapService().move,this);
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, Services.getMapService().touchBegin, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_END, Services.getMapService().touchEnd, this);
         };
         MainMapLayer.prototype.getId = function () {
             return frame.FrameType.main_frame;

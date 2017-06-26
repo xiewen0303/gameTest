@@ -3,6 +3,11 @@ module map {
 		public constructor() {
 		}
 
+		/**
+		 * 移动间距
+		 */
+		public static move_space = 100;
+
 		public static cell_Width:number = 100;
 		public static cell_Height:number = 100;
 		public static cell_H_count:number = 6; //地图纵向格子数

@@ -12,7 +12,7 @@ module map {
 		public setBgImager(bgName:string):void {
 			let sky = util.UIUtil.createBitmapByName(bgName);
 			this.addChild(sky);
-			let gameStage = store.Stores.getFrameManager().getGameStage();
+			let gameStage = Stores.getFrameManager().getGameStage();
 			 
 			sky.width = this.width;
 			sky.height = this.height;

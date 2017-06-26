@@ -19,7 +19,7 @@ var map;
         Cell.prototype.setBgImager = function (bgName) {
             var sky = util.UIUtil.createBitmapByName(bgName);
             this.addChild(sky);
-            var gameStage = store.Stores.getFrameManager().getGameStage();
+            var gameStage = Stores.getFrameManager().getGameStage();
             sky.width = this.width;
             sky.height = this.height;
         };

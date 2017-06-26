@@ -7,11 +7,11 @@ var map;
         function MapCtl() {
         }
         MapCtl.initMap = function (displayObject) {
-            this.mapService.initMap(displayObject);
+            Services.getMapService().initMap(displayObject);
+            //displayObject.addEventListener(egret.TouchEvent.TOUCH_TAP,Services.getMapService().move,this);
         };
         return MapCtl;
     }());
-    MapCtl.mapService = new map.MapService();
     map.MapCtl = MapCtl;
     __reflect(MapCtl.prototype, "map.MapCtl");
 })(map || (map = {}));

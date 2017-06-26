@@ -18,7 +18,7 @@ module frame {
 		public setBg(bgName:string):void {
 			let sky = util.UIUtil.createBitmapByName(bgName);
 			this.addChild(sky);
-			let gameStage = store.Stores.getFrameManager().getGameStage();
+			let gameStage = Stores.getFrameManager().getGameStage();
 			let stageW =  gameStage.stageWidth;
 			let stageH =  gameStage.stageHeight;
 			sky.width = stageW;

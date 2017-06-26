@@ -33,7 +33,7 @@ class Main extends frame.MapBaseLayer {
     init():void {
         LogHandler.debug("coming.. Main"+this.stage);
          //储存当前场景对象
-        let frameManager = store.Stores.getFrameManager();
+        let frameManager = Stores.getFrameManager();
         frameManager.setGameStage(this.stage);
         frameManager.addLayer(this);
     }

@@ -33,11 +33,13 @@ var login;
          * Click the button
          */
         LoginFrame.prototype.loginClick = function (e) {
-            var urlData = this.getChildByName("ip");
-            var url = urlData.text.split(":");
-            NetHander.createSocket(url[0], Number(url[1]));
-            var accountData = this.getChildByName("accountId");
-            LoginFrame.accountId = accountData.text;
+            //TODO 
+            // let urlData = <eui.TextInput>this.getChildByName("ip");
+            // let url:string[] =  urlData.text.split(":");
+            // NetHander.createSocket(url[0],Number(url[1]));
+            // let accountData = <eui.TextInput>this.getChildByName("accountId");
+            // LoginFrame.accountId = accountData.text;
+            login.LoginCtl.changeStage();
         };
         return LoginFrame;
     }(eui.Component));

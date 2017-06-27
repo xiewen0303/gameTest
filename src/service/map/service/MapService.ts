@@ -14,6 +14,8 @@ module map {
 			cell.setPy(0);
 			cell.setBgImager("1001_png");
 
+			var p = cell.localToGlobal();
+
 			mapManager.setMapContainer(displayObject);
 			mapManager.addCell(cell);
 		}
@@ -25,7 +27,6 @@ module map {
 		}
 		
 		public moveSpace(endX:number,endY:number,beginX:number,beginY:number):void {
-			LogHandler.debug("x:"+endX+"--y:"+endY+"--beginX"+beginX+"--beginY"+beginY);
 			let mapManager:MapManager = Stores.getMapManager();
 			let mapCell = mapManager.getMapCell(0,0);
 			
@@ -33,6 +34,11 @@ module map {
 			let yMove = Tools.abs(endY - beginY);
 			let moveX = 0;
 			let moveY = 0;
+
+			//最小滑动距离
+			if(xMove < MapConst.min_space || yMove < MapConst.min_space) {
+				return;
+			}
 
 			if(xMove > yMove){
 				moveX = endX > beginX ? MapConst.move_space: - MapConst.move_space;

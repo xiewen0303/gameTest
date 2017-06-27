@@ -24,13 +24,16 @@ var map;
             mainMapLayer.touchBeginY = e.localY;
         };
         MapService.prototype.moveSpace = function (endX, endY, beginX, beginY) {
-            LogHandler.debug("x:" + endX + "--y:" + endY + "--beginX" + beginX + "--beginY" + beginY);
             var mapManager = Stores.getMapManager();
             var mapCell = mapManager.getMapCell(0, 0);
             var xMove = Tools.abs(endX - beginX);
             var yMove = Tools.abs(endY - beginY);
             var moveX = 0;
             var moveY = 0;
+            //最小滑动距离
+            if (xMove < map.MapConst.min_space || yMove < map.MapConst.min_space) {
+                return;
+            }
             if (xMove > yMove) {
                 moveX = endX > beginX ? map.MapConst.move_space : -map.MapConst.move_space;
             }

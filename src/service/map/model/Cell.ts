@@ -20,12 +20,12 @@ module map {
 
 		public setPx(px:number):void{
 			this.px = px;
-			this.x = util.UIUtil.getCoordX(px);
+			this.x = 0;//util.UIUtil.getCoordX(px);
 		}
 
 		public setPy(py:number):void{
 			this.py = py;
-			this.y = util.UIUtil.getCoordY(py);
+			this.y = 0;//util.UIUtil.getCoordY(py);
 		}
 		public getPx():number{
 			return this.px;

@@ -25,11 +25,11 @@ var map;
         };
         Cell.prototype.setPx = function (px) {
             this.px = px;
-            this.x = util.UIUtil.getCoordX(px);
+            this.x = 0; //util.UIUtil.getCoordX(px);
         };
         Cell.prototype.setPy = function (py) {
             this.py = py;
-            this.y = util.UIUtil.getCoordY(py);
+            this.y = 0; //util.UIUtil.getCoordY(py);
         };
         Cell.prototype.getPx = function () {
             return this.px;

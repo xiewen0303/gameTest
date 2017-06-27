@@ -30,12 +30,15 @@ module login {
 		 * Click the button
 		 */
 		private loginClick(e: egret.TouchEvent) {
-			let urlData = <eui.TextInput>this.getChildByName("ip");
-			let url:string[] =  urlData.text.split(":");
-			NetHander.createSocket(url[0],Number(url[1]));
+			//TODO 
+			// let urlData = <eui.TextInput>this.getChildByName("ip");
+			// let url:string[] =  urlData.text.split(":");
+			// NetHander.createSocket(url[0],Number(url[1]));
 
-			let accountData = <eui.TextInput>this.getChildByName("accountId");
-			LoginFrame.accountId = accountData.text;
+			// let accountData = <eui.TextInput>this.getChildByName("accountId");
+			// LoginFrame.accountId = accountData.text;
+			
+			LoginCtl.changeStage();
 		}
 	}
 }

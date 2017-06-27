@@ -15,12 +15,16 @@ module map {
 		 * 初始化
 		 */
 		private init():void {
-			//TODO this.setBg("bg_014_png");
+			this.setBg("bg_014_png");
 
 			let mainMapFrame = new MainMapFrame();
+			mainMapFrame.width = 600;
+			mainMapFrame.height = 600;
+			
+			mainMapFrame.x = 20;
+			mainMapFrame.y = 240;
 			this.addChild(mainMapFrame);
 
-			// mainMapFrame.addEventListener(egret.TouchEvent.TOUCH_TAP,Services.getMapService().move,this);
 			this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,Services.getMapService().touchBegin,this);
 			this.addEventListener(egret.TouchEvent.TOUCH_END,Services.getMapService().touchEnd,this);
 		}

@@ -21,7 +21,6 @@ module map {
 		 */
 		private initMap():void {
 			//设置背景的宽和高
-			
 			map.MapCtl.initMap(this);
 		}
 	}

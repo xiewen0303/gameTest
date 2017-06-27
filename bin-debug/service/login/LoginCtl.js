@@ -15,6 +15,9 @@ var login;
                 alert("登录错误!");
                 return;
             }
+            this.changeStage();
+        };
+        LoginCtl.changeStage = function () {
             //切换场景
             var frameManager = Stores.getFrameManager();
             frameManager.removeLayer(frame.FrameType.login_frame);

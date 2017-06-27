@@ -15,13 +15,17 @@ module login {
 				return;
 			}
 
-			//切换场景
-			let frameManager = 	Stores.getFrameManager();
-			frameManager.removeLayer(frame.FrameType.login_frame);
-			let mainMapLayer = new map.MainMapLayer();
-			
-			frameManager.addLayer(mainMapLayer);
-			frameManager.addToStage(mainMapLayer);
+			this.changeStage();
+		}
+
+		public static changeStage():void {
+				//切换场景
+				let frameManager = 	Stores.getFrameManager();
+				frameManager.removeLayer(frame.FrameType.login_frame);
+				let mainMapLayer = new map.MainMapLayer();
+				
+				frameManager.addLayer(mainMapLayer);
+				frameManager.addToStage(mainMapLayer);
 		}
 		
 		/**

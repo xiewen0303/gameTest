@@ -12,6 +12,10 @@ var map;
      * 移动间距
      */
     MapConst.move_space = 100;
+    /**
+     * 最小滑动间距
+     */
+    MapConst.min_space = 2;
     MapConst.cell_Width = 100;
     MapConst.cell_Height = 100;
     MapConst.cell_H_count = 6; //地图纵向格子数

@@ -15,6 +15,7 @@ var map;
             cell.setPx(0);
             cell.setPy(0);
             cell.setBgImager("1001_png");
+            var p = cell.localToGlobal();
             mapManager.setMapContainer(displayObject);
             mapManager.addCell(cell);
         };
@@ -40,8 +41,13 @@ var map;
             else {
                 moveY = endY > beginY ? map.MapConst.move_space : -map.MapConst.move_space;
             }
-            mapCell.x = mapCell.x + moveX;
-            mapCell.y = mapCell.y + moveY;
+            var targetX = mapCell.x + moveX;
+            var targetY = mapCell.y + moveY;
+            //边界限制
+            if (targetX < map.MapConst.minPoint || targetX > map.MapConst.maxPointX || targetY < map.MapConst.minPoint || targetY > map.MapConst.maxPointY) {
+                return;
+            }
+            egret.Tween.get(mapCell).to({ x: targetX, y: targetY }, 300, egret.Ease.sineIn);
         };
         MapService.prototype.touchEnd = function (e) {
             var endX = e.localX;

@@ -20,6 +20,10 @@ var map;
     MapConst.cell_Height = 100;
     MapConst.cell_H_count = 6; //地图纵向格子数
     MapConst.cell_W_count = 6; //地图横向格子数
+    //移动的地图坐标范围
+    MapConst.minPoint = 0;
+    MapConst.maxPointX = MapConst.cell_Width * (MapConst.cell_W_count - 1);
+    MapConst.maxPointY = MapConst.cell_Height * (MapConst.cell_H_count - 1);
     map.MapConst = MapConst;
     __reflect(MapConst.prototype, "map.MapConst");
 })(map || (map = {}));

@@ -45,9 +45,16 @@ module map {
 			}else{
 				moveY = endY > beginY ? MapConst.move_space: - MapConst.move_space
 			}
-			
-			mapCell.x = mapCell.x + moveX;
-			mapCell.y = mapCell.y + moveY;
+
+			let targetX = mapCell.x + moveX;
+			let targetY = mapCell.y + moveY;
+
+			//边界限制
+			if(targetX < MapConst.minPoint || targetX > MapConst.maxPointX || targetY < MapConst.minPoint || targetY > MapConst.maxPointY) {
+				return;
+			}
+
+			egret.Tween.get(mapCell).to({x:targetX,y:targetY},300,egret.Ease.sineIn);
 		}
 
 		public touchEnd(e: egret.TouchEvent):void {

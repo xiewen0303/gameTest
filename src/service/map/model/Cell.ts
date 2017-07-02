@@ -34,5 +34,10 @@ module map {
 		public getPy():number{
 			return this.px;
 		}
+
+		public playerEffcts(type:number){
+			let bombEffects = new effects.Change2Bomb();
+			bombEffects.initMovieClip(this);
+		}
 	}
 }

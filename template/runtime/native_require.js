@@ -12,12 +12,12 @@ var game_file_list = [
 	"libs/modules/dragonBones/dragonBones.js",
 	"polyfill/promise.js",
 	"bin-debug/service/login/LoginCtl.js",
-	"bin-debug/service/login/service/LoginService.js",
 	"bin-debug/service/map/MapConst.js",
 	"bin-debug/service/map/MapManager.js",
 	"bin-debug/service/map/service/MapService.js",
 	"bin-debug/ui/frameManager/FrameManager.js",
 	"bin-debug/ui/frameManager/MapBaseLayer.js",
+	"bin-debug/service/login/service/LoginService.js",
 	"bin-debug/service/map/MapCtl.js",
 	"bin-debug/core/util/Tools.js",
 	"bin-debug/effects/Change2Bomb.js",
@@ -26,7 +26,7 @@ var game_file_list = [
 	"bin-debug/AssetAdapter.js",
 	"bin-debug/core/net/Decode.js",
 	"bin-debug/core/net/IDecode.js",
-	"bin-debug/core/log/LogHandler.js",
+	"bin-debug/ui/util/UIUtil.js",
 	"bin-debug/core/net/MessageCode.js",
 	"bin-debug/service/map/model/Cell.js",
 	"bin-debug/core/net/NetHandler.js",
@@ -41,7 +41,7 @@ var game_file_list = [
 	"bin-debug/ui/login/LoginFrame.js",
 	"bin-debug/ui/map/MainMapFrame.js",
 	"bin-debug/ui/map/MainMapLayer.js",
-	"bin-debug/ui/util/UIUtil.js",
+	"bin-debug/core/log/LogHandler.js",
 	//----auto game_file_list end----
 ];
 

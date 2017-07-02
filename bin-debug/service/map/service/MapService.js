@@ -47,7 +47,9 @@ var map;
             if (targetX < map.MapConst.minPoint || targetX > map.MapConst.maxPointX || targetY < map.MapConst.minPoint || targetY > map.MapConst.maxPointY) {
                 return;
             }
-            egret.Tween.get(mapCell).to({ x: targetX, y: targetY }, 300, egret.Ease.sineIn);
+            egret.Tween.get(mapCell).to({ x: targetX, y: targetY }, 300, egret.Ease.sineIn).call(function (e) {
+                mapCell.playerEffcts(1);
+            }, this);
         };
         MapService.prototype.touchEnd = function (e) {
             var endX = e.localX;

@@ -37,6 +37,10 @@ var map;
         Cell.prototype.getPy = function () {
             return this.px;
         };
+        Cell.prototype.playerEffcts = function (type) {
+            var bombEffects = new effects.Change2Bomb();
+            bombEffects.initMovieClip(this);
+        };
         return Cell;
     }(egret.Sprite));
     map.Cell = Cell;

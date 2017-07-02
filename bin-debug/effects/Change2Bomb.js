@@ -14,15 +14,20 @@ var effects;
             return _super.call(this) || this;
         }
         //初始化
-        Change2Bomb.prototype.initMovieClip = function () {
+        Change2Bomb.prototype.initMovieClip = function (displayerObject) {
+            var _this = this;
+            displayerObject.addChild(this);
+            this.x = displayerObject.$getWidth() / 2;
+            this.y = displayerObject.$getWidth() / 2;
             var NewProject_mc_json = RES.getRes("NewProject_mc_json");
             var texture = RES.getRes("NewProject_tex_png");
             var mcFactory = new egret.MovieClipDataFactory(NewProject_mc_json, texture);
             var mc = new egret.MovieClip(mcFactory.generateMovieClipData());
             this.addChild(mc);
-            mc.gotoAndPlay(0, 3);
+            mc.gotoAndPlay(0, 1);
             mc.addEventListener(egret.Event.COMPLETE, function (e) {
-                egret.error("执行完成！");
+                LogHandler.debug("执行完成！" + e.type);
+                displayerObject.removeChild(_this);
             }, this);
             mc.addEventListener(egret.Event.LOOP_COMPLETE, function (e) {
                 e.target;

@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,egret_icon_png,description_json,1001_png,bg_011_png,bg_012_png,bg_013_png,bg_014_png,bg_015_png,bg_016_png,bg_0112_png,bg_0122_png,bg_0132_png,bg_0142_png,bg_0152_png,bg_0162_png,NewProject_tex_png,NewProject_mc_json",
+			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,egret_icon_png,description_json,1001_png,NewProject_tex_png,NewProject_mc_json",
 			"name": "preload"
 		},
 		{
@@ -159,66 +159,6 @@
 			"url": "assets/item/1001.png",
 			"type": "image",
 			"name": "1001_png"
-		},
-		{
-			"url": "assets/bg/bg_011.png",
-			"type": "image",
-			"name": "bg_011_png"
-		},
-		{
-			"url": "assets/bg/bg_012.png",
-			"type": "image",
-			"name": "bg_012_png"
-		},
-		{
-			"url": "assets/bg/bg_013.png",
-			"type": "image",
-			"name": "bg_013_png"
-		},
-		{
-			"url": "assets/bg/bg_014.png",
-			"type": "image",
-			"name": "bg_014_png"
-		},
-		{
-			"url": "assets/bg/bg_015.png",
-			"type": "image",
-			"name": "bg_015_png"
-		},
-		{
-			"url": "assets/bg/bg_016.png",
-			"type": "image",
-			"name": "bg_016_png"
-		},
-		{
-			"name": "bg_0112_png",
-			"type": "image",
-			"url": "assets/bg/bg_011.png"
-		},
-		{
-			"name": "bg_0122_png",
-			"type": "image",
-			"url": "assets/bg/bg_012.png"
-		},
-		{
-			"name": "bg_0132_png",
-			"type": "image",
-			"url": "assets/bg/bg_013.png"
-		},
-		{
-			"name": "bg_0142_png",
-			"type": "image",
-			"url": "assets/bg/bg_014.png"
-		},
-		{
-			"name": "bg_0152_png",
-			"type": "image",
-			"url": "assets/bg/bg_015.png"
-		},
-		{
-			"name": "bg_0162_png",
-			"type": "image",
-			"url": "assets/bg/bg_016.png"
 		},
 		{
 			"name": "NewProject_tex_png",

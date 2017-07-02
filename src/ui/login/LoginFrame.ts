@@ -38,14 +38,7 @@ module login {
 			// let accountData = <eui.TextInput>this.getChildByName("accountId");
 			// LoginFrame.accountId = accountData.text;
 			
-			//LoginCtl.changeStage();
-
-			let bombEffects = new effects.Change2Bomb();
-			bombEffects.x = 150;
-			bombEffects.y = 50;
-
-			this.addChild(bombEffects);
-			bombEffects.initMovieClip();
+			LoginCtl.changeStage();
 		}
 	}
 }

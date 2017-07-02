@@ -6,17 +6,22 @@ module effects {
 		}
 
 		//初始化
-		public initMovieClip():void{
+		public initMovieClip(displayerObject:egret.DisplayObjectContainer):void {
+			displayerObject.addChild(this);
+			this.x =  displayerObject.$getWidth()/2;
+			this.y =  displayerObject.$getWidth()/2;
+
 			let NewProject_mc_json = RES.getRes("NewProject_mc_json");
 			let texture = RES.getRes( "NewProject_tex_png" );
 
 			var mcFactory = new egret.MovieClipDataFactory(NewProject_mc_json,texture);
 			var mc = new egret.MovieClip(mcFactory.generateMovieClipData());
 			this.addChild(mc);
-			mc.gotoAndPlay(0,3);
+			mc.gotoAndPlay(0,1);
 
 			mc.addEventListener(egret.Event.COMPLETE, (e:egret.Event)=>{
-				egret.error("执行完成！"+e.type);
+				LogHandler.debug("执行完成！"+e.type);
+				displayerObject.removeChild(this);
 			}, this);
 
 			mc.addEventListener(egret.Event.LOOP_COMPLETE,(e:egret.Event)=>{

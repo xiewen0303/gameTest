@@ -54,7 +54,9 @@ module map {
 				return;
 			}
 
-			egret.Tween.get(mapCell).to({x:targetX,y:targetY},300,egret.Ease.sineIn);
+			egret.Tween.get(mapCell).to({x:targetX,y:targetY},300,egret.Ease.sineIn).call((e:egret.Event)=>{
+				mapCell.playerEffcts(1);
+			},this);
 		}
 
 		public touchEnd(e: egret.TouchEvent):void {

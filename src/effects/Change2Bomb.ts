@@ -8,8 +8,8 @@ module effects {
 		//初始化
 		public initMovieClip(displayerObject:egret.DisplayObjectContainer):void {
 			displayerObject.addChild(this);
-			this.x =  displayerObject.$getWidth()/2;
-			this.y =  displayerObject.$getWidth()/2;
+			this.x =  displayerObject.width/2;
+			this.y =  displayerObject.height/2;
 
 			let NewProject_mc_json = RES.getRes("NewProject_mc_json");
 			let texture = RES.getRes( "NewProject_tex_png" );

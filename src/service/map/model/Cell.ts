@@ -1,7 +1,7 @@
 module map {
 	export class Cell extends egret.Sprite {
-		private px:number;
-		private py:number;
+		private cellX:number;
+		private cellY:number;
 		
 		public constructor() {
 			super();
@@ -18,21 +18,28 @@ module map {
 			sky.height = this.height;
 		}
 
-		public setPx(px:number):void{
-			this.px = px;
-			this.x = 0;//util.UIUtil.getCoordX(px);
+		public setCellX(px:number):void{
+			this.cellX = px;
 		}
 
-		public setPy(py:number):void{
-			this.py = py;
-			this.y = 0;//util.UIUtil.getCoordY(py);
-		}
-		public getPx():number{
-			return this.px;
+		public setCellY(py:number):void{
+			this.cellY = py;
 		}
 
-		public getPy():number{
-			return this.px;
+		public initPoint(px:number,py:number):void{
+			this.cellX = px;
+			this.cellY = py;
+			this.x = px * MapConst.cell_Width;
+			this.y = py * MapConst.cell_Height;
+		}
+
+
+		public getCellX():number{
+			return this.cellX;
+		}
+
+		public getCellY():number{
+			return this.cellY;
 		}
 
 		public playerEffcts(type:number){

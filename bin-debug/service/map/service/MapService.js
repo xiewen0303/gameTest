@@ -11,13 +11,24 @@ var map;
         //初始化地图
         MapService.prototype.initMap = function (displayObject) {
             var mapManager = Stores.getMapManager();
-            var cell = new map.Cell();
-            cell.setPx(0);
-            cell.setPy(0);
-            cell.setBgImager("1001_png");
-            var p = cell.localToGlobal();
             mapManager.setMapContainer(displayObject);
-            mapManager.addCell(cell);
+            var cell1 = new map.Cell();
+            cell1.initPoint(0, 0);
+            cell1.setBgImager("1001_png");
+            mapManager.initCell(cell1);
+            var cell2 = new map.Cell();
+            cell2.initPoint(0, 5);
+            cell2.setBgImager("1001_png");
+            mapManager.initCell(cell2);
+            //var p = cell.localToGlobal();
+        };
+        //滑动cell单元格
+        MapService.prototype.moveCell = function (cell, toCellX, toCellY) {
+            var mapManager = Stores.getMapManager();
+            mapManager.removeMapCell(cell);
+            cell.setCellX(toCellX);
+            cell.setCellY(toCellY);
+            mapManager.addMapCell(cell);
         };
         MapService.prototype.touchBegin = function (e) {
             var mainMapLayer = e.target;
@@ -25,29 +36,56 @@ var map;
             mainMapLayer.touchBeginY = e.localY;
         };
         MapService.prototype.moveSpace = function (endX, endY, beginX, beginY) {
-            var mapManager = Stores.getMapManager();
-            var mapCell = mapManager.getMapCell(0, 0);
+            var _this = this;
             var xMove = Tools.abs(endX - beginX);
             var yMove = Tools.abs(endY - beginY);
-            var moveX = 0;
-            var moveY = 0;
+            var moveCellX = 0;
+            var moveCellY = 0;
             //最小滑动距离
             if (xMove < map.MapConst.min_space || yMove < map.MapConst.min_space) {
                 return;
             }
             if (xMove > yMove) {
-                moveX = endX > beginX ? map.MapConst.move_space : -map.MapConst.move_space;
+                moveCellX = endX > beginX ? 1 : -1;
             }
             else {
-                moveY = endY > beginY ? map.MapConst.move_space : -map.MapConst.move_space;
+                moveCellY = endY > beginY ? 1 : -1;
             }
-            var targetX = mapCell.x + moveX;
-            var targetY = mapCell.y + moveY;
+            var mapManager = Stores.getMapManager();
+            var mapCells = mapManager.getMapCells();
+            // for(var i = 0; i < mapCells.length; i++){
+            // 	let cells = mapCells[i];
+            // 	if(cells == null){
+            // 		continue;
+            // 	}
+            // 	for(var j = 0; j < cells.length; j++ ){
+            // 		let rCell = cells[j];
+            // 		if(rCell != null){
+            // 				this.moveExt(rCell,moveCellX,moveCellY);
+            // 		}
+            // 	}
+            // }
+            mapCells.forEach(function (cells) {
+                if (cells != null) {
+                    cells.forEach(function (rCell) {
+                        if (rCell != null) {
+                            _this.moveExt(rCell, moveCellX, moveCellY);
+                        }
+                    });
+                }
+            });
+        };
+        MapService.prototype.moveExt = function (mapCell, moveCellX, moveCellY) {
+            var targetX = mapCell.x + moveCellX * map.MapConst.move_space;
+            var targetY = mapCell.y + moveCellY * map.MapConst.move_space;
+            var targetCellX = mapCell.getCellX() + moveCellX;
+            var targetCellY = mapCell.getCellY() + moveCellY;
             //边界限制
             if (targetX < map.MapConst.minPoint || targetX > map.MapConst.maxPointX || targetY < map.MapConst.minPoint || targetY > map.MapConst.maxPointY) {
                 return;
             }
-            egret.Tween.get(mapCell).to({ x: targetX, y: targetY }, 300, egret.Ease.sineIn).call(function (e) {
+            this.moveCell(mapCell, targetCellX, targetCellY);
+            egret.Tween.get(mapCell).to({ x: targetX, y: targetY }, 200, egret.Ease.sineIn).call(function (e) {
                 mapCell.playerEffcts(1);
             }, this);
         };

@@ -6,29 +6,43 @@ var map;
     var MapManager = (function () {
         function MapManager() {
             //整个地图的元素
-            this.mapCells = new Array();
+            this.mapCells = new Array(map.MapConst.cell_W_count);
         }
         MapManager.prototype.setMapContainer = function (mapContainer) {
             this.mapContainer = mapContainer;
         };
-        MapManager.prototype.addCell = function (cell) {
+        MapManager.prototype.initCell = function (cell) {
             this.addMapCell(cell);
             this.mapContainer.addChild(cell);
         };
-        MapManager.prototype.getMapCell = function (x, y) {
-            var xCells = this.mapCells[x];
+        /**
+         * 获取整个地图的Cell元素
+         */
+        MapManager.prototype.getMapCells = function () {
+            // let temp = new Array();
+            // temp.push(this.mapCells);
+            return this.mapCells;
+        };
+        MapManager.prototype.getMapCell = function (cellX, cellY) {
+            var xCells = this.mapCells[cellX];
             if (xCells == null) {
-                LogHandler.error("格子不存在，x=" + x + "   y=" + y);
+                LogHandler.error("格子不存在，x=" + cellX + "   y=" + cellY);
                 return null;
             }
-            return xCells[y];
+            return xCells[cellY];
+        };
+        MapManager.prototype.removeMapCell = function (cell) {
+            var yCells = this.mapCells[cell.getCellX()];
+            yCells[cell.getCellY()] = null;
+            var tempsss = this.mapCells[cell.getCellX()];
+            LogHandler.debug("" + tempsss.length);
         };
         MapManager.prototype.addMapCell = function (cell) {
-            var px = cell.getPx();
-            var py = cell.getPx();
+            var px = cell.getCellX();
+            var py = cell.getCellY();
             var cells = this.mapCells[px];
             if (cells == null) {
-                cells = new Array();
+                cells = new Array(map.MapConst.cell_H_count);
                 this.mapCells[px] = cells;
             }
             cells[py] = cell;

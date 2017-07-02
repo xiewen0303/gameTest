@@ -23,19 +23,23 @@ var map;
             sky.width = this.width;
             sky.height = this.height;
         };
-        Cell.prototype.setPx = function (px) {
-            this.px = px;
-            this.x = 0; //util.UIUtil.getCoordX(px);
+        Cell.prototype.setCellX = function (px) {
+            this.cellX = px;
         };
-        Cell.prototype.setPy = function (py) {
-            this.py = py;
-            this.y = 0; //util.UIUtil.getCoordY(py);
+        Cell.prototype.setCellY = function (py) {
+            this.cellY = py;
         };
-        Cell.prototype.getPx = function () {
-            return this.px;
+        Cell.prototype.initPoint = function (px, py) {
+            this.cellX = px;
+            this.cellY = py;
+            this.x = px * map.MapConst.cell_Width;
+            this.y = py * map.MapConst.cell_Height;
         };
-        Cell.prototype.getPy = function () {
-            return this.px;
+        Cell.prototype.getCellX = function () {
+            return this.cellX;
+        };
+        Cell.prototype.getCellY = function () {
+            return this.cellY;
         };
         Cell.prototype.playerEffcts = function (type) {
             var bombEffects = new effects.Change2Bomb();

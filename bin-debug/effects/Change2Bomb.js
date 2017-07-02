@@ -17,8 +17,8 @@ var effects;
         Change2Bomb.prototype.initMovieClip = function (displayerObject) {
             var _this = this;
             displayerObject.addChild(this);
-            this.x = displayerObject.$getWidth() / 2;
-            this.y = displayerObject.$getWidth() / 2;
+            this.x = displayerObject.width / 2;
+            this.y = displayerObject.height / 2;
             var NewProject_mc_json = RES.getRes("NewProject_mc_json");
             var texture = RES.getRes("NewProject_tex_png");
             var mcFactory = new egret.MovieClipDataFactory(NewProject_mc_json, texture);

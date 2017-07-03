@@ -14,7 +14,7 @@ var effects;
             return _super.call(this) || this;
         }
         //初始化
-        Change2Bomb.prototype.initMovieClip = function (displayerObject) {
+        Change2Bomb.prototype.playEffects = function (displayerObject, callFunction) {
             var _this = this;
             displayerObject.addChild(this);
             this.x = displayerObject.width / 2;
@@ -28,6 +28,9 @@ var effects;
             mc.addEventListener(egret.Event.COMPLETE, function (e) {
                 LogHandler.debug("执行完成！" + e.type);
                 displayerObject.removeChild(_this);
+                if (callFunction) {
+                    callFunction();
+                }
             }, this);
             mc.addEventListener(egret.Event.LOOP_COMPLETE, function (e) {
                 e.target;

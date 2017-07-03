@@ -19,8 +19,6 @@ var map;
          * 获取整个地图的Cell元素
          */
         MapManager.prototype.getMapCells = function () {
-            // let temp = new Array();
-            // temp.push(this.mapCells);
             return this.mapCells;
         };
         MapManager.prototype.getMapCell = function (cellX, cellY) {
@@ -34,9 +32,17 @@ var map;
         MapManager.prototype.removeMapCell = function (cell) {
             var yCells = this.mapCells[cell.getCellX()];
             yCells[cell.getCellY()] = null;
-            var tempsss = this.mapCells[cell.getCellX()];
-            LogHandler.debug("" + tempsss.length);
         };
+        MapManager.prototype.removeSpriteCell = function (cell) {
+            this.mapContainer.removeChild(cell);
+        };
+        // /**
+        //  * 存储和界面都移除
+        //  */
+        // public removeCell(cell:Cell):void {
+        // 	this.removeSpriteCell(cell);
+        // 	this.removeMapCell(cell);
+        // }
         MapManager.prototype.addMapCell = function (cell) {
             var px = cell.getCellX();
             var py = cell.getCellY();

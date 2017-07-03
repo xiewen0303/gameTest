@@ -16,6 +16,12 @@ var map;
             _this.height = map.MapConst.cell_Height;
             return _this;
         }
+        Cell.prototype.getElementType = function () {
+            return this.elementType;
+        };
+        Cell.prototype.getConfigId = function () {
+            return this.configId;
+        };
         Cell.prototype.setBgImager = function (bgName) {
             var sky = util.UIUtil.createBitmapByName(bgName);
             this.addChild(sky);
@@ -29,11 +35,13 @@ var map;
         Cell.prototype.setCellY = function (py) {
             this.cellY = py;
         };
-        Cell.prototype.initPoint = function (px, py) {
+        Cell.prototype.initPoint = function (px, py, configId) {
             this.cellX = px;
             this.cellY = py;
             this.x = px * map.MapConst.cell_Width;
             this.y = py * map.MapConst.cell_Height;
+            this.configId = configId;
+            this.elementType = 3; //TODO 这个地方从配置表获得
         };
         Cell.prototype.getCellX = function () {
             return this.cellX;
@@ -41,9 +49,9 @@ var map;
         Cell.prototype.getCellY = function () {
             return this.cellY;
         };
-        Cell.prototype.playerEffcts = function (type) {
+        Cell.prototype.playerEffcts = function (type, callFunction) {
             var bombEffects = new effects.Change2Bomb();
-            bombEffects.initMovieClip(this);
+            bombEffects.playEffects(this, callFunction);
         };
         return Cell;
     }(egret.Sprite));

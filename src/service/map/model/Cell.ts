@@ -2,11 +2,21 @@ module map {
 	export class Cell extends egret.Sprite {
 		private cellX:number;
 		private cellY:number;
+		private elementType:number; //类型
+		private configId:number; 	//配置ID
 		
 		public constructor() {
 			super();
 			this.width = map.MapConst.cell_Width;
 			this.height = map.MapConst.cell_Height;
+		}
+
+		public getElementType():number{
+			return this.elementType;
+		}
+
+		public getConfigId():number{
+			return this.configId;
 		}
 
 		public setBgImager(bgName:string):void {
@@ -26,11 +36,13 @@ module map {
 			this.cellY = py;
 		}
 
-		public initPoint(px:number,py:number):void{
+		public initPoint(px:number,py:number,configId:number):void{
 			this.cellX = px;
 			this.cellY = py;
 			this.x = px * MapConst.cell_Width;
 			this.y = py * MapConst.cell_Height;
+			this.configId = configId;
+			this.elementType = 3; //TODO 这个地方从配置表获得
 		}
 
 
@@ -42,9 +54,9 @@ module map {
 			return this.cellY;
 		}
 
-		public playerEffcts(type:number){
+		public playerEffcts(type:number,callFunction?:Function){
 			let bombEffects = new effects.Change2Bomb();
-			bombEffects.initMovieClip(this);
+			bombEffects.playEffects(this,callFunction);
 		}
 	}
 }

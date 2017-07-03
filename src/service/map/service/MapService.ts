@@ -12,12 +12,12 @@ module map {
 			mapManager.setMapContainer(displayObject);
 
 			let cell1:Cell = new Cell();
-			cell1.initPoint(0,0);
+			cell1.initPoint(0,0,1001);
 			cell1.setBgImager("1001_png");
 			mapManager.initCell(cell1);
 
 			let cell2:Cell = new Cell();
-			cell2.initPoint(0,5);
+			cell2.initPoint(0,5,1001);
 			cell2.setBgImager("1001_png");
 			mapManager.initCell(cell2);
 			//var p = cell.localToGlobal();
@@ -57,30 +57,54 @@ module map {
 			}
 
 			let mapManager:MapManager = Stores.getMapManager();
-			let mapCells = mapManager.getMapCells();
 
-			// for(var i = 0; i < mapCells.length; i++){
-			// 	let cells = mapCells[i];
-			// 	if(cells == null){
-			// 		continue;
-			// 	}
-			// 	for(var j = 0; j < cells.length; j++ ){
-			// 		let rCell = cells[j];
-			// 		if(rCell != null){
-			// 				this.moveExt(rCell,moveCellX,moveCellY);
-			// 		}
-			// 	}
-			// }
-
-			mapCells.forEach(cells => {
-				if(cells != null){
-					cells.forEach(rCell => {
-						if(rCell != null){
-							this.moveExt(rCell,moveCellX,moveCellY);
+			if(moveCellX > 0){
+				//遍历
+				for(let i = MapConst.cell_H_count-1; i >= 0 ; i--){
+					for(let j = 0; j< MapConst.cell_W_count; j++){
+						let targetCell = mapManager.getMapCell(i,j);
+						if(targetCell != null){
+							this.moveExt(targetCell,moveCellX,moveCellY);
 						}
-					});
+					}
 				}
-			});
+			}
+
+			if(moveCellY > 0){
+				//遍历
+				for(let i = 0; i < MapConst.cell_H_count; i++){
+					for(let j = MapConst.cell_W_count-1; j >= 0; j--){
+						let targetCell = mapManager.getMapCell(i,j);
+						if(targetCell != null){
+							this.moveExt(targetCell,moveCellX,moveCellY);
+						}
+					}
+				}
+			}
+
+			if(moveCellX < 0 || moveCellY < 0){
+				//遍历
+				for(let i = 0; i < MapConst.cell_H_count; i++ ){
+					for(let j = 0; j< MapConst.cell_W_count; j++){
+						let targetCell = mapManager.getMapCell(i,j);
+						if(targetCell != null){
+							this.moveExt(targetCell,moveCellX,moveCellY);
+						}
+					}
+				}
+			}
+
+			
+
+			// mapCells.forEach(cells => {
+			// 	if(cells != null){
+			// 		cells.forEach(rCell => {
+			// 			if(rCell != null){
+			// 				this.moveExt(rCell,moveCellX,moveCellY);
+			// 			}
+			// 		});
+			// 	}
+			// });
 		}
 
 		private moveExt(mapCell:Cell,moveCellX:number,moveCellY:number):void{
@@ -94,16 +118,39 @@ module map {
 			if(targetX < MapConst.minPoint || targetX > MapConst.maxPointX || targetY < MapConst.minPoint || targetY > MapConst.maxPointY) {
 				return;
 			}
-
+			let mapManager = Stores.getMapManager();
+			//已经有不可合并的元素了不移动
+			let isMerger = false;
+			let targetCell = mapManager.getMapCell(targetCellX,targetCellY);
+			if(targetCell != null){
+				if (targetCell.getConfigId() != mapCell.getConfigId() || !MapUtil.isMergeType(mapCell.getElementType())){
+					return;
+				}else{
+					isMerger = true;
+				}
+			}
+			
 			this.moveCell(mapCell,targetCellX,targetCellY);
-
+			
 			egret.Tween.get(mapCell).to({x:targetX,y:targetY},200,egret.Ease.sineIn).call((e:egret.Event)=>{
-				mapCell.playerEffcts(1);
+				if(isMerger){
+					//初始化新的道具
+					let cell1:Cell = new Cell();
+					cell1.initPoint(targetCellX,targetCellY,1002);
+					cell1.setBgImager("1002_png");
+					mapManager.initCell(cell1);
+
+					mapCell.playerEffcts(1,function(){
+							mapManager.removeSpriteCell(targetCell);
+							mapManager.removeSpriteCell(mapCell);
+					});
+				}
 			},this);
 		}
 
 
 		public touchEnd(e: egret.TouchEvent):void {
+			LogHandler.debug("coming endTouch!!!");
 			let endX:number = e.localX;
 			let endY:number = e.localY;
 			let mainMapLayer = <map.MainMapLayer>e.target;

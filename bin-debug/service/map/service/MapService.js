@@ -13,11 +13,11 @@ var map;
             var mapManager = Stores.getMapManager();
             mapManager.setMapContainer(displayObject);
             var cell1 = new map.Cell();
-            cell1.initPoint(0, 0);
+            cell1.initPoint(0, 0, 1001);
             cell1.setBgImager("1001_png");
             mapManager.initCell(cell1);
             var cell2 = new map.Cell();
-            cell2.initPoint(0, 5);
+            cell2.initPoint(0, 5, 1001);
             cell2.setBgImager("1001_png");
             mapManager.initCell(cell2);
             //var p = cell.localToGlobal();
@@ -36,7 +36,6 @@ var map;
             mainMapLayer.touchBeginY = e.localY;
         };
         MapService.prototype.moveSpace = function (endX, endY, beginX, beginY) {
-            var _this = this;
             var xMove = Tools.abs(endX - beginX);
             var yMove = Tools.abs(endY - beginY);
             var moveCellX = 0;
@@ -52,28 +51,48 @@ var map;
                 moveCellY = endY > beginY ? 1 : -1;
             }
             var mapManager = Stores.getMapManager();
-            var mapCells = mapManager.getMapCells();
-            // for(var i = 0; i < mapCells.length; i++){
-            // 	let cells = mapCells[i];
-            // 	if(cells == null){
-            // 		continue;
-            // 	}
-            // 	for(var j = 0; j < cells.length; j++ ){
-            // 		let rCell = cells[j];
-            // 		if(rCell != null){
-            // 				this.moveExt(rCell,moveCellX,moveCellY);
-            // 		}
-            // 	}
-            // }
-            mapCells.forEach(function (cells) {
-                if (cells != null) {
-                    cells.forEach(function (rCell) {
-                        if (rCell != null) {
-                            _this.moveExt(rCell, moveCellX, moveCellY);
+            if (moveCellX > 0) {
+                //遍历
+                for (var i = map.MapConst.cell_H_count - 1; i >= 0; i--) {
+                    for (var j = 0; j < map.MapConst.cell_W_count; j++) {
+                        var targetCell = mapManager.getMapCell(i, j);
+                        if (targetCell != null) {
+                            this.moveExt(targetCell, moveCellX, moveCellY);
                         }
-                    });
+                    }
                 }
-            });
+            }
+            if (moveCellY > 0) {
+                //遍历
+                for (var i = 0; i < map.MapConst.cell_H_count; i++) {
+                    for (var j = map.MapConst.cell_W_count - 1; j >= 0; j--) {
+                        var targetCell = mapManager.getMapCell(i, j);
+                        if (targetCell != null) {
+                            this.moveExt(targetCell, moveCellX, moveCellY);
+                        }
+                    }
+                }
+            }
+            if (moveCellX < 0 || moveCellY < 0) {
+                //遍历
+                for (var i = 0; i < map.MapConst.cell_H_count; i++) {
+                    for (var j = 0; j < map.MapConst.cell_W_count; j++) {
+                        var targetCell = mapManager.getMapCell(i, j);
+                        if (targetCell != null) {
+                            this.moveExt(targetCell, moveCellX, moveCellY);
+                        }
+                    }
+                }
+            }
+            // mapCells.forEach(cells => {
+            // 	if(cells != null){
+            // 		cells.forEach(rCell => {
+            // 			if(rCell != null){
+            // 				this.moveExt(rCell,moveCellX,moveCellY);
+            // 			}
+            // 		});
+            // 	}
+            // });
         };
         MapService.prototype.moveExt = function (mapCell, moveCellX, moveCellY) {
             var targetX = mapCell.x + moveCellX * map.MapConst.move_space;
@@ -84,12 +103,35 @@ var map;
             if (targetX < map.MapConst.minPoint || targetX > map.MapConst.maxPointX || targetY < map.MapConst.minPoint || targetY > map.MapConst.maxPointY) {
                 return;
             }
+            var mapManager = Stores.getMapManager();
+            //已经有不可合并的元素了不移动
+            var isMerger = false;
+            var targetCell = mapManager.getMapCell(targetCellX, targetCellY);
+            if (targetCell != null) {
+                if (targetCell.getConfigId() != mapCell.getConfigId() || !map.MapUtil.isMergeType(mapCell.getElementType())) {
+                    return;
+                }
+                else {
+                    isMerger = true;
+                }
+            }
             this.moveCell(mapCell, targetCellX, targetCellY);
             egret.Tween.get(mapCell).to({ x: targetX, y: targetY }, 200, egret.Ease.sineIn).call(function (e) {
-                mapCell.playerEffcts(1);
+                if (isMerger) {
+                    //初始化新的道具
+                    var cell1 = new map.Cell();
+                    cell1.initPoint(targetCellX, targetCellY, 1002);
+                    cell1.setBgImager("1002_png");
+                    mapManager.initCell(cell1);
+                    mapCell.playerEffcts(1, function () {
+                        mapManager.removeSpriteCell(targetCell);
+                        mapManager.removeSpriteCell(mapCell);
+                    });
+                }
             }, this);
         };
         MapService.prototype.touchEnd = function (e) {
+            LogHandler.debug("coming endTouch!!!");
             var endX = e.localX;
             var endY = e.localY;
             var mainMapLayer = e.target;

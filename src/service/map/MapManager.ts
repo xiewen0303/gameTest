@@ -16,12 +16,12 @@ module map {
 			this.mapContainer.addChild(cell);
 		}
 
+
+
 		/**
 		 * 获取整个地图的Cell元素
 		 */
 		public getMapCells():Cell[][]{
-			// let temp = new Array();
-			// temp.push(this.mapCells);
 			return this.mapCells;
 		}
 
@@ -37,9 +37,19 @@ module map {
 		public removeMapCell(cell:Cell):void {
 			let yCells = this.mapCells[cell.getCellX()];
 			yCells[cell.getCellY()] = null;
-			let tempsss = this.mapCells[cell.getCellX()];
-			LogHandler.debug(""+tempsss.length);
 		}
+
+		public removeSpriteCell(cell:Cell):void {
+			this.mapContainer.removeChild(cell);
+		}
+
+		// /**
+		//  * 存储和界面都移除
+		//  */
+		// public removeCell(cell:Cell):void {
+		// 	this.removeSpriteCell(cell);
+		// 	this.removeMapCell(cell);
+		// }
 
 		public addMapCell(cell:Cell):void {
 			let px = cell.getCellX();

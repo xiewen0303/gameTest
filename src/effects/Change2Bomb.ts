@@ -6,7 +6,7 @@ module effects {
 		}
 
 		//初始化
-		public initMovieClip(displayerObject:egret.DisplayObjectContainer):void {
+		public playEffects(displayerObject:egret.DisplayObjectContainer,callFunction?:Function):void {
 			displayerObject.addChild(this);
 			this.x =  displayerObject.width/2;
 			this.y =  displayerObject.height/2;
@@ -22,6 +22,9 @@ module effects {
 			mc.addEventListener(egret.Event.COMPLETE, (e:egret.Event)=>{
 				LogHandler.debug("执行完成！"+e.type);
 				displayerObject.removeChild(this);
+				if(callFunction){
+					callFunction();
+				}
 			}, this);
 
 			mc.addEventListener(egret.Event.LOOP_COMPLETE,(e:egret.Event)=>{

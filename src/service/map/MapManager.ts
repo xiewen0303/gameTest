@@ -25,6 +25,28 @@ module map {
 			return this.mapCells;
 		}
 
+		/**
+		 * 获取地图X相同的的Cell元素
+		 */
+		public getMapCellsByX(cellX:number):Cell[]{
+			return this.mapCells[cellX];
+		}
+
+		/**
+		 * 获取地图的Y相同的所有Cell元素
+		 */
+		public getMapCellsByY(cellY:number):Cell[]{
+			let result = new Array(MapConst.cell_W_count);
+			this.mapCells.forEach(cells => {
+				cells.forEach(cellTemp => {
+					if(cellTemp != null && cellY == cellTemp.getCellY()){
+						result[cellTemp.getCellX()] = cellTemp;
+					}
+				});
+			});
+			return result;
+		}
+
 		public getMapCell(cellX:number,cellY:number):Cell{
 			let xCells:Cell[] =  this.mapCells[cellX];
 			if(xCells == null){

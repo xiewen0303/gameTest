@@ -15,6 +15,7 @@ var map;
         __extends(MainMapLayer, _super);
         function MainMapLayer() {
             var _this = _super.call(this) || this;
+            _this.needMove = false; //是否需要移动
             _this.init();
             return _this;
         }
@@ -30,7 +31,8 @@ var map;
             mainMapFrame.y = 240;
             this.addChild(mainMapFrame);
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, Services.getMapService().touchBegin, this);
-            this.addEventListener(egret.TouchEvent.TOUCH_END, Services.getMapService().touchEnd, this);
+            // this.addEventListener(egret.TouchEvent.TOUCH_END,Services.getMapService().touchEnd,this);
+            this.addEventListener(egret.TouchEvent.TOUCH_MOVE, Services.getMapService().touchMove, this);
         };
         MainMapLayer.prototype.getId = function () {
             return frame.FrameType.main_frame;

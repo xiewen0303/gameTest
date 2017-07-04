@@ -21,6 +21,26 @@ var map;
         MapManager.prototype.getMapCells = function () {
             return this.mapCells;
         };
+        /**
+         * 获取地图X相同的的Cell元素
+         */
+        MapManager.prototype.getMapCellsByX = function (cellX) {
+            return this.mapCells[cellX];
+        };
+        /**
+         * 获取地图的Y相同的所有Cell元素
+         */
+        MapManager.prototype.getMapCellsByY = function (cellY) {
+            var result = new Array(map.MapConst.cell_W_count);
+            this.mapCells.forEach(function (cells) {
+                cells.forEach(function (cellTemp) {
+                    if (cellTemp != null && cellY == cellTemp.getCellY()) {
+                        result[cellTemp.getCellX()] = cellTemp;
+                    }
+                });
+            });
+            return result;
+        };
         MapManager.prototype.getMapCell = function (cellX, cellY) {
             var xCells = this.mapCells[cellX];
             if (xCells == null) {

@@ -36,25 +36,34 @@ module map {
 			let mainMapLayer = <map.MainMapLayer>e.target;
 			mainMapLayer.touchBeginX  = e.localX;
 			mainMapLayer.touchBeginY  = e.localY;
+			mainMapLayer.needMove = true;
 		}
 		
-		public moveSpace(endX:number,endY:number,beginX:number,beginY:number):void {
+		public moveSpace(endX:number,endY:number,beginX:number,beginY:number,e:egret.TouchEvent):void {
 			let xMove = Tools.abs(endX - beginX);
 			let yMove = Tools.abs(endY - beginY);
-		
-			let moveCellX = 0;
-			let moveCellY = 0;
 
 			//最小滑动距离
 			if(xMove < MapConst.min_space || yMove < MapConst.min_space) {
 				return;
 			}
 
+			//设置移动
+			let mainMapLayer = <map.MainMapLayer>e.target;
+			mainMapLayer.needMove = false;
+
+			let moveCellX = 0;
+			let moveCellY = 0;
+
+			
+
 			if(xMove > yMove){
 				moveCellX = endX > beginX ? 1 : - 1;
 			}else{
 				moveCellY = endY > beginY ? 1 : - 1;
 			}
+
+
 
 			let mapManager:MapManager = Stores.getMapManager();
 
@@ -94,8 +103,6 @@ module map {
 				}
 			}
 
-			
-
 			// mapCells.forEach(cells => {
 			// 	if(cells != null){
 			// 		cells.forEach(rCell => {
@@ -107,31 +114,121 @@ module map {
 			// });
 		}
 
-		private moveExt(mapCell:Cell,moveCellX:number,moveCellY:number):void{
-			let targetX = mapCell.x + moveCellX * MapConst.move_space;
-			let targetY = mapCell.y + moveCellY * MapConst.move_space;
-			let targetCellX = mapCell.getCellX() + moveCellX;
-			let targetCellY = mapCell.getCellY() + moveCellY;
+		private moveExt(mapCell:Cell,directionX:number,directionY:number):void {
 
-
-			//边界限制
-			if(targetX < MapConst.minPoint || targetX > MapConst.maxPointX || targetY < MapConst.minPoint || targetY > MapConst.maxPointY) {
-				return;
-			}
 			let mapManager = Stores.getMapManager();
-			//已经有不可合并的元素了不移动
+			let mapCellX = mapCell.getCellX()
+			let mapCellY = mapCell.getCellY();
+
+			let targetCell:Cell;
+
+			let targetCellX = mapCellX;
+			let targetCellY = mapCellY;
+
 			let isMerger = false;
-			let targetCell = mapManager.getMapCell(targetCellX,targetCellY);
-			if(targetCell != null){
-				if (targetCell.getConfigId() != mapCell.getConfigId() || !MapUtil.isMergeType(mapCell.getElementType())){
-					return;
-				}else{
-					isMerger = true;
+			
+			//获得移动的最终坐标
+			if(directionX > 0) {
+				let mapCellYs = mapManager.getMapCellsByY(mapCellY);
+				for(let targetX:number = MapConst.cell_W_count-1; targetX > mapCellX; targetX--){
+					targetCell = mapCellYs[targetX];
+					if(targetCell != null) {
+						if (targetCell.getConfigId() != mapCell.getConfigId() || !MapUtil.isMergeType(mapCell.getElementType())){
+							//不可移动
+							continue;
+						}else{
+							isMerger = true;
+						}
+					}
+					targetCellX = targetX;
+					break;
 				}
 			}
-			
+
+			if(directionX < 0){
+				let mapCellYs = mapManager.getMapCellsByY(mapCellY);
+
+				for(let targetX = 0; targetX < mapCellX; targetX++ ) {
+					targetCell = mapCellYs[targetX];
+					if(targetCell != null) {
+						if (targetCell.getConfigId() != mapCell.getConfigId() || !MapUtil.isMergeType(mapCell.getElementType())){
+							//不可移动
+							continue;
+						}else{
+							isMerger = true;
+						}
+					}
+					targetCellX = targetX;
+					break;
+				}
+			}
+
+
+			//获得移动的最终坐标
+			if(directionY > 0) {
+				let mapCellXs = mapManager.getMapCellsByX(mapCellX);
+				
+				for(let targetY = MapConst.cell_H_count - 1; targetY > mapCellY; targetY--){
+					targetCell = mapCellXs[targetY];
+					if(targetCell != null) {
+						if (targetCell.getConfigId() != mapCell.getConfigId() || !MapUtil.isMergeType(mapCell.getElementType())){
+							//不可移动
+							continue;
+						}else{
+							isMerger = true;
+						}
+					}
+					targetCellY = targetY;
+					break;
+				}
+			}
+
+			//获得移动的最终坐标
+			if(directionY < 0) {
+				let mapCellXs = mapManager.getMapCellsByX(mapCellX);
+				
+				for(let targetY = 0; targetY < mapCellY; targetY++){
+					targetCell = mapCellXs[targetY];
+					if(targetCell != null) {
+						if (targetCell.getConfigId() != mapCell.getConfigId() || !MapUtil.isMergeType(mapCell.getElementType())){
+							//不可移动
+							continue;
+						}else{
+							isMerger = true;
+						}
+					}
+					targetCellY = targetY;
+					break;
+				}
+			}
+
+			//没有可以移动的则不移动
+			if(targetCellX == mapCellX && targetCellY == mapCellY){
+				return;
+			}
+
+			let targetX = targetCellX * MapConst.move_space;
+			let targetY = targetCellY * MapConst.move_space;
+
+			// let targetCellX = mapCell.getCellX() + moveX;
+			// let targetCellY = mapCell.getCellY() + moveY;
+
+			// //边界限制
+			// if(targetX < MapConst.minPoint || targetX > MapConst.maxPointX || targetY < MapConst.minPoint || targetY > MapConst.maxPointY) {
+			// 	return;
+			// }
+			//已经有不可合并的元素了不移动
+			// let targetCell = mapManager.getMapCell(targetCellX,targetCellY);
+			// if(targetCell != null){
+			// 	if (targetCell.getConfigId() != mapCell.getConfigId() || !MapUtil.isMergeType(mapCell.getElementType())){
+			// 		return;
+			// 	}else{
+			// 		isMerger = true;
+			// 	}
+			// }
+
 			this.moveCell(mapCell,targetCellX,targetCellY);
-			
+
 			egret.Tween.get(mapCell).to({x:targetX,y:targetY},200,egret.Ease.sineIn).call((e:egret.Event)=>{
 				if(isMerger){
 					//初始化新的道具
@@ -150,13 +247,31 @@ module map {
 
 
 		public touchEnd(e: egret.TouchEvent):void {
+			
 			LogHandler.debug("coming endTouch!!!");
 			let endX:number = e.localX;
 			let endY:number = e.localY;
 			let mainMapLayer = <map.MainMapLayer>e.target;
 			let beginX:number = mainMapLayer.touchBeginX;
 			let beginY:number = mainMapLayer.touchBeginY;
-			Services.getMapService().moveSpace(endX,endY,beginX,beginY);
+
+			Services.getMapService().moveSpace(endX,endY,beginX,beginY,e);
+		}
+
+		/**
+		 * 响应 touch move 事件
+		 */
+		public touchMove(e: egret.TouchEvent):void {
+			LogHandler.debug(" moveTouch!!!");
+			let endX:number = e.localX;
+			let endY:number = e.localY;
+			let mainMapLayer = <map.MainMapLayer>e.target;
+			let beginX:number = mainMapLayer.touchBeginX;
+			let beginY:number = mainMapLayer.touchBeginY;
+			if(!mainMapLayer.needMove){
+				return;
+			}
+			Services.getMapService().moveSpace(endX,endY,beginX,beginY,e);
 		}
 	}
 }

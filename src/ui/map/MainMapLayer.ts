@@ -5,6 +5,7 @@ module map {
 	export class MainMapLayer extends frame.MapBaseLayer {
 		public touchBeginX:number;
 		public touchBeginY:number;
+		public needMove:boolean = false; //是否需要移动
 
 		public constructor() {
 			super();
@@ -16,7 +17,7 @@ module map {
 		 */
 		private init():void {
 			this.setBg("bg_014_png");
-
+			
 			let mainMapFrame = new MainMapFrame();
 			mainMapFrame.width = 600;
 			mainMapFrame.height = 600;
@@ -26,7 +27,8 @@ module map {
 			this.addChild(mainMapFrame);
 
 			this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,Services.getMapService().touchBegin,this);
-			this.addEventListener(egret.TouchEvent.TOUCH_END,Services.getMapService().touchEnd,this);
+			// this.addEventListener(egret.TouchEvent.TOUCH_END,Services.getMapService().touchEnd,this);
+			this.addEventListener(egret.TouchEvent.TOUCH_MOVE,Services.getMapService().touchMove,this);
 		}
 
 		public getId():frame.FrameType {

@@ -1,0 +1,18 @@
+module map {
+	export class MapCtl {
+
+		public constructor() {
+		}
+
+		public static initMap(displayObject:egret.DisplayObjectContainer,mapFightObject:egret.DisplayObjectContainer):void {
+			let mapBagObject = <egret.DisplayObjectContainer> displayObject.getChildByName("items");
+			let mapManager:MapManager = Stores.getMapManager();
+
+			mapManager.setMapContainer(mapFightObject);
+			mapManager.setFightBagContainer(mapBagObject);
+			mapManager.setFightScane(displayObject);
+
+			Services.getMapService().initMap();
+		}
+	}
+}

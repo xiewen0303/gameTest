@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="ItemSlotSkin" width="400" height="300" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="15d93a96745" ></w:Config>
+	<e:Image id="open" width="100%" height="100%" x="0" y="0" source="bg_115_png" name="open"/>
+	<e:Image id="lock" width="100%" height="100%" x="0" y="0" source="bg_116_png" name="lock"/>
+	<e:Image width="100%" height="100%" x="0" y="0" source="bg_114_png"/>
+</e:Skin>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="Scale9GridPlaneSkin" width="600" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="15d87c52f75" ></w:Config>
+	<e:Image width="100%"  height="100%" source="bg_033_png" fillMode="scale" scale9Grid="49,48,44,43">
+	
+	</e:Image>
+	<!--
+	<e:scale9Grid> <e:Rectangle x="50" y="50" width="10" height="30"/> </e:scale9Grid>
+	-->
+</e:Skin>

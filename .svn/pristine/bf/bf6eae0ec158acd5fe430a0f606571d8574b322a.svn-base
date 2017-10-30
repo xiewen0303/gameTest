@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="LoginFrameSkin" width="640" height="300" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="15cbf560367" ></w:Config>
+	<e:Button id="loginBtn" label="login" x="249" y="195"/>
+	<e:Label text="IP:" x="165" y="73" width="100"/>
+	<e:Label text="账号：" x="165" y="123" anchorOffsetX="0" width="100"/>
+	<e:TextInput id="accountId" width="190" height="30" x="285" y="123" name="accountId"/>
+	<e:TextInput id="ip" width="190" height="30" x="285" y="73" name="ip" text="172.24.16.56:8081" anchorOffsetX="0"/>
+</e:Skin>

@@ -1,0 +1,53 @@
+module map {
+	/**
+	 * 主线地图场景
+	 */
+	export class MainMapLayer extends frame.MapBaseLayer {
+		// public touchBeginX:number;
+		// public touchBeginY:number;
+		// public needMove:boolean = false; //是否需要移动
+
+		public constructor() {
+			super();
+			this.init();
+		}
+		
+		/**
+		 * 初始化
+		 */
+		private init():void {
+			 
+			let mainMapFrame = new MapFight();
+			let fightScean = new map.FightScane();
+			fightScean.init(20,240,600,600);
+			mainMapFrame.addChild(fightScean);
+			
+			//皮肤加载完成后调用
+			mainMapFrame.addEventListener(egret.Event.COMPLETE,function(event:egret.TouchEvent){
+				map.MapCtl.initMap(mainMapFrame,fightScean);
+			},mainMapFrame);
+		
+
+			this.addChild(mainMapFrame);
+			 
+			// this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,Services.getMapService().touchBegin,this);
+			//   // this.addEventListener(egret.TouchEvent.TOUCH_END,Services.getMapService().touchEnd,this);
+			// this.addEventListener(egret.TouchEvent.TOUCH_MOVE,Services.getMapService().touchMove,this);
+
+			// let sp = new egret.Sprite();
+			// sp.alpha= 0;
+			// sp.graphics.beginFill(10000);
+			// sp.graphics.drawRect(0,0,200,200);
+			// sp.graphics.endFill();
+			// sp.touchEnabled = true;
+			// sp.addEventListener(egret.TouchEvent.TOUCH_BEGIN,function(event:egret.TouchEvent){
+			// 	LogHandler.error("----------------");
+			// },sp);
+			// this.addChild(sp);
+		}
+
+		public getId():frame.FrameType {
+			return frame.FrameType.main_frame;
+		}
+	}
+}

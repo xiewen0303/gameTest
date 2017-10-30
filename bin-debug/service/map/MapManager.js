@@ -7,13 +7,64 @@ var map;
         function MapManager() {
             //整个地图的元素
             this.mapCells = new Array(map.MapConst.cell_W_count);
+            //存储背包带入元素
+            this.bagCells = new Array();
         }
+        MapManager.prototype.getMoveItemLayer = function () {
+            return this.moveItemLayer;
+        };
+        MapManager.prototype.setMoveItemLayer = function (moveItemLayer) {
+            this.moveItemLayer = moveItemLayer;
+        };
+        MapManager.prototype.getChioseItem = function () {
+            return this.chioseItem;
+        };
+        MapManager.prototype.setChioseItem = function (chioseItem) {
+            this.chioseItem = chioseItem;
+        };
+        MapManager.prototype.getFightScane = function () {
+            return this.fightScane;
+        };
+        MapManager.prototype.setFightScane = function (fightScean) {
+            this.fightScane = fightScean;
+        };
+        MapManager.prototype.getFightBagContainer = function () {
+            return this.fightBagContainer;
+        };
+        MapManager.prototype.setFightBagContainer = function (fightBagContainer) {
+            this.fightBagContainer = fightBagContainer;
+        };
+        MapManager.prototype.getMapContainer = function () {
+            return this.mapContainer;
+        };
         MapManager.prototype.setMapContainer = function (mapContainer) {
             this.mapContainer = mapContainer;
         };
-        MapManager.prototype.initCell = function (cell) {
+        MapManager.prototype.initFightSceanCell = function (cell) {
             this.addMapCell(cell);
             this.mapContainer.addChild(cell);
+        };
+        /**
+         * 添加背包格子元素
+         */
+        MapManager.prototype.initFightBagCell = function (cell) {
+            var itemContainer = this.getItemsByFightBag(cell.getFightBagIndex());
+            itemContainer.getChildByName("open").visible = true;
+            itemContainer.getChildByName("lock").visible = false;
+            this.addFightBagCell(cell);
+        };
+        MapManager.prototype.getItemsByFightBag = function (fightBIndex) {
+            return this.fightBagContainer.getChildByName("item" + (fightBIndex + 1));
+        };
+        /**
+         * 初始化背包格子数
+         */
+        MapManager.prototype.initFightBagCount = function (size) {
+            for (var index_1 = 0; index_1 < size; index_1++) {
+                var itemContainer = this.fightBagContainer.getChildByName("item" + (index_1 + 1));
+                itemContainer.getChildByName("open").visible = true;
+                itemContainer.getChildByName("lock").visible = false;
+            }
         };
         /**
          * 获取整个地图的Cell元素
@@ -44,7 +95,7 @@ var map;
         MapManager.prototype.getMapCell = function (cellX, cellY) {
             var xCells = this.mapCells[cellX];
             if (xCells == null) {
-                LogHandler.error("格子不存在，x=" + cellX + "   y=" + cellY);
+                //LogHandler.error("格子不存在，x="+cellX+"   y="+cellY);
                 return null;
             }
             return xCells[cellY];
@@ -72,6 +123,18 @@ var map;
                 this.mapCells[px] = cells;
             }
             cells[py] = cell;
+        };
+        MapManager.prototype.addFightBagCell = function (cell) {
+            var itemContainer = this.getItemsByFightBag(cell.getFightBagIndex());
+            this.bagCells[cell.getFightBagIndex()] = cell;
+            cell.x = 19;
+            cell.y = 19;
+            cell.scaleX = 0.8;
+            cell.scaleY = 0.8;
+            itemContainer.addChild(cell);
+        };
+        MapManager.prototype.removeFightBagCell = function (index) {
+            this.bagCells[index] = null;
         };
         return MapManager;
     }());

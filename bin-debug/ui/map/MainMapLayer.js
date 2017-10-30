@@ -15,7 +15,6 @@ var map;
         __extends(MainMapLayer, _super);
         function MainMapLayer() {
             var _this = _super.call(this) || this;
-            _this.needMove = false; //是否需要移动
             _this.init();
             return _this;
         }
@@ -23,16 +22,18 @@ var map;
          * 初始化
          */
         MainMapLayer.prototype.init = function () {
-            this.setBg("bg_014_png");
-            var mainMapFrame = new map.MainMapFrame();
-            mainMapFrame.width = 600;
-            mainMapFrame.height = 600;
-            mainMapFrame.x = 20;
-            mainMapFrame.y = 240;
-            this.addChild(mainMapFrame);
-            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, Services.getMapService().touchBegin, this);
-            // this.addEventListener(egret.TouchEvent.TOUCH_END,Services.getMapService().touchEnd,this);
-            this.addEventListener(egret.TouchEvent.TOUCH_MOVE, Services.getMapService().touchMove, this);
+            var mainMapFrame = new map.MapFight();
+            var fightScean = new map.FightScane();
+            fightScean.init(map.MapConst.fightSlot_X, map.MapConst.fightSlot_Y, 600, 600);
+            mainMapFrame.addChild(fightScean);
+            var moveItemLayer = new map.MoveBagItemLayer();
+            moveItemLayer.init(map.MapConst.bg_width, map.MapConst.bg_height);
+            //皮肤加载完成后调用
+            mainMapFrame.addEventListener(egret.Event.COMPLETE, function (event) {
+                map.MapCtl.initMap(mainMapFrame, fightScean, moveItemLayer);
+            }, mainMapFrame);
+            this.addChildAt(moveItemLayer, 10);
+            this.addChildAt(mainMapFrame, 0);
         };
         MainMapLayer.prototype.getId = function () {
             return frame.FrameType.main_frame;

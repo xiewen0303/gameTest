@@ -15,6 +15,25 @@ var map;
             }
             return false;
         };
+        /**
+         * 获取移动到场景中的坐标
+         */
+        MapUtil.getCellXY = function (px, py) {
+            var tempx = px - map.MapConst.fightSlot_X;
+            var tempy = py - map.MapConst.fightSlot_Y;
+            if (tempx < 0 || tempy < 0 || tempx > map.MapConst.maxPointX || tempy > map.MapConst.maxPointY) {
+                LogHandler.debug("not in fight cell container x:" + tempx + ",y:" + tempy);
+                return null;
+            }
+            var cellx = (tempx / map.MapConst.cell_Width) >> 0;
+            var celly = (tempy / map.MapConst.cell_Height) | 0;
+            var cell = Stores.getMapManager().getMapCell(cellx, celly);
+            if (cell != null) {
+                LogHandler.debug("cell is exist" + cell.getConfigId());
+                return null;
+            }
+            return [cellx, celly];
+        };
         return MapUtil;
     }());
     map.MapUtil = MapUtil;

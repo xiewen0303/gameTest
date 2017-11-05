@@ -63,14 +63,28 @@ module map {
 			mapManager.initFightBagCell(cell);
 			
 			//初始化背包
+			this.addMoveListener(cell);
+		}
+
+		/**
+		 * 添加战场背包道具的移动监听器
+		 */
+		public addMoveListener(cell:Cell):void{
 			cell.addEventListener(egret.TouchEvent.TOUCH_BEGIN,this.choiseItem,cell);
 		}
 
+		/**
+		 * 删除战场背包道具的移动监听器
+		 */
+		public removeMoveLister(cell:Cell):void{
+			cell.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this.choiseItem,cell);
+		}
 
 		/**
 		 * 选择需要拖动的道具
 		 */
-		public choiseItem(event:egret.TouchEvent){
+		private choiseItem(event:egret.TouchEvent)
+		{
 			let mapManager =  Stores.getMapManager();
 
 			let cell = <map.Cell>event.target;
@@ -98,9 +112,25 @@ module map {
 		}
 
 		/**
+		 * 添加点击爆炸事件
+		 */
+		public addClickBombListener(cell:Cell):void
+		{	
+			cell.addEventListener(egret.TouchEvent.TOUCH_TAP,this.bombItem,cell);
+		}
+
+		private bombItem(event:egret.TouchEvent)
+		{
+			//TODO 实现爆炸具体的伤害
+			let cell = <map.Cell>event.target;
+			LogHandler.error("--------itemBomb------"+cell.getConfigId());
+		}
+
+		/**
 		 * 设置背包开启格子数
 		 */
-		public setOpenBagCount(number:number):void{
+		public setOpenBagCount(number:number):void
+		{
 			let mapManager:MapManager = Stores.getMapManager();
 			mapManager.initFightBagCount(number);
 		}
@@ -387,7 +417,8 @@ module map {
 		/**
 		 * 战场背包移动事件监听
 		 */
-		public moveFightBagMove(event:egret.TouchEvent){
+		public moveFightBagMove(event:egret.TouchEvent)
+		{
 			
 			let cell = <map.Cell>Stores.getMapManager().getChioseItem();
 			if(cell == null){
@@ -400,27 +431,31 @@ module map {
 		}
 
 		/**
-		 * 战场背包移动结束事件
+		 * 战场背包元素移动结束事件
 		 */
-		public moveBagItemEnd(event:egret.TouchEvent){
+		public moveBagItemEnd(event:egret.TouchEvent)
+		{
 			let mapManager = Stores.getMapManager();
 			let cell = <map.Cell>mapManager.getChioseItem();
-			if(cell == null){
+			if(cell == null)
+			{
 				LogHandler.error("not chiose item");
 				return;
 			}
 
-			// let mapFightContainer = mapManager.getMapContainer();
+			//触摸事件移除
+			let moveItemLayer = mapManager.getMoveItemLayer();
+			moveItemLayer.touchEnabled = false;
 
 			let point = MapUtil.getCellXY(cell.x,cell.y);
-			if(point == null){
-				//退回到原来的地点 TODO wind 可以使用移动到原来的道具容器内
+			if(point == null)
+			{
+				//退回到原来的地点
 				let index = cell.getFightBagIndex();
 				let itemContainer = mapManager.getItemsByFightBag(index);
 				let p = itemContainer.localToGlobal();
 
-				let moveItemLayer = mapManager.getMoveItemLayer();
-				moveItemLayer.touchEnabled = false;
+				
 
 				egret.Tween.get(cell).to({x:p.x,y:p.y},2000,egret.Ease.sineIn).call((e:egret.Event)=>{
 					
@@ -430,13 +465,20 @@ module map {
 				},this);
 				return;
 			}
-			
-			//加入到战场中去
-			LogHandler.debug(point[0]+"="+point[1]);
-			cell.initPoint(point[0],point[1]);
-			Services.getMapService().addFightSceanByCell(cell);
 
-			LogHandler.error("----"+event.localX+","+event.localY+","+cell.getConfigId());
+
+			//加入到战场中去
+			cell.initPoint(point[0],point[1]);
+
+			let mapService = Services.getMapService();
+			mapService.addFightSceanByCell(cell);
+			mapService.removeMoveLister(cell);
+			
+			//添加点击爆炸事件
+			cell.touchEnabled = true;
+			mapService.addClickBombListener(cell);
+
+			LogHandler.debug(point[0]+"="+point[1]+"----"+event.localX+","+event.localY+","+cell.getConfigId());
 		}
 	}
 }

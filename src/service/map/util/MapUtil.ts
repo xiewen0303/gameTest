@@ -34,7 +34,7 @@ module map {
 				LogHandler.debug("cell is exist"+cell.getConfigId());
 				return null;
 			}
-
+			
 			return [cellx,celly];
 		}
 	}

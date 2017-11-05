@@ -52,7 +52,19 @@ var map;
             cell.setFightBagIndex(index);
             mapManager.initFightBagCell(cell);
             //初始化背包
+            this.addMoveListener(cell);
+        };
+        /**
+         * 添加战场背包道具的移动监听器
+         */
+        MapService.prototype.addMoveListener = function (cell) {
             cell.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.choiseItem, cell);
+        };
+        /**
+         * 删除战场背包道具的移动监听器
+         */
+        MapService.prototype.removeMoveLister = function (cell) {
+            cell.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.choiseItem, cell);
         };
         /**
          * 选择需要拖动的道具
@@ -75,6 +87,17 @@ var map;
             cell.touchEnabled = false;
             moveItemLayer.touchEnabled = true;
             LogHandler.error("----" + cell.x + "," + cell.y + "," + cell.getConfigId());
+        };
+        /**
+         * 添加点击爆炸事件
+         */
+        MapService.prototype.addClickBombListener = function (cell) {
+            cell.addEventListener(egret.TouchEvent.TOUCH_TAP, this.bombItem, cell);
+        };
+        MapService.prototype.bombItem = function (event) {
+            //TODO 实现爆炸具体的伤害
+            var cell = event.target;
+            LogHandler.error("--------itemBomb------" + cell.getConfigId());
         };
         /**
          * 设置背包开启格子数
@@ -337,7 +360,7 @@ var map;
             cell.y = event.localY;
         };
         /**
-         * 战场背包移动结束事件
+         * 战场背包元素移动结束事件
          */
         MapService.prototype.moveBagItemEnd = function (event) {
             var mapManager = Stores.getMapManager();
@@ -346,27 +369,31 @@ var map;
                 LogHandler.error("not chiose item");
                 return;
             }
-            // let mapFightContainer = mapManager.getMapContainer();
+            //触摸事件移除
+            var moveItemLayer = mapManager.getMoveItemLayer();
+            moveItemLayer.touchEnabled = false;
             var point = map.MapUtil.getCellXY(cell.x, cell.y);
             if (point == null) {
-                //退回到原来的地点 TODO wind 可以使用移动到原来的道具容器内
+                //退回到原来的地点
                 var index_1 = cell.getFightBagIndex();
                 var itemContainer = mapManager.getItemsByFightBag(index_1);
                 var p = itemContainer.localToGlobal();
-                var moveItemLayer_1 = mapManager.getMoveItemLayer();
-                moveItemLayer_1.touchEnabled = false;
                 egret.Tween.get(cell).to({ x: p.x, y: p.y }, 2000, egret.Ease.sineIn).call(function (e) {
                     cell.touchEnabled = true;
-                    moveItemLayer_1.removeChild(cell);
+                    moveItemLayer.removeChild(cell);
                     mapManager.addFightBagCell(cell);
                 }, this);
                 return;
             }
             //加入到战场中去
-            LogHandler.debug(point[0] + "=" + point[1]);
             cell.initPoint(point[0], point[1]);
-            Services.getMapService().addFightSceanByCell(cell);
-            LogHandler.error("----" + event.localX + "," + event.localY + "," + cell.getConfigId());
+            var mapService = Services.getMapService();
+            mapService.addFightSceanByCell(cell);
+            mapService.removeMoveLister(cell);
+            //添加点击爆炸事件
+            cell.touchEnabled = true;
+            mapService.addClickBombListener(cell);
+            LogHandler.debug(point[0] + "=" + point[1] + "----" + event.localX + "," + event.localY + "," + cell.getConfigId());
         };
         return MapService;
     }());

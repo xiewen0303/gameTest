@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin class="loginSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:commonui="commonui.*"  >
 	<w:Config id="15d81cc503a" ></w:Config>
-	<e:Image width="640" height="1136" x="0" y="0" anchorOffsetX="0" anchorOffsetY="0" source="bg_003_png"/>
+	<e:Image width="640" height="1136" x="0" y="0" anchorOffsetX="0" anchorOffsetY="0" source="bg_0032_png"/>
 	<e:Image width="612" height="212" x="20" y="112" anchorOffsetX="0" anchorOffsetY="0" source="bg_132_png"/>
 	<e:Button id="account_login" label="" y="1021" right="202" anchorOffsetY="0" height="69" anchorOffsetX="0" width="232">
 		<e:skinName>
